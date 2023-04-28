@@ -1,0 +1,31 @@
+@import "util/variables.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif, Helvetica, Arial;
+  font-size: 16px;
+  background: var(--black);
+  white-space: pre-wrap;
+}
+
+table tbody {
+  counter-reset: rowNumber;
+}
+
+table tbody tr {
+  counter-increment: rowNumber;
+}
+
+table tbody tr td:first-child::before {
+  content: counter(rowNumber);
+}
+
+textarea {
+  resize: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,20 @@
+/* Archive Page Components */
+
+.archive-page {
+  padding-top: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.archive-description {
+  width: 75%;
+  height: 20%;
+  padding-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+.archive-description div {
+  margin-bottom: 10px;
+}

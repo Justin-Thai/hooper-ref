@@ -1,0 +1,11 @@
+:root {
+    /* Background Color */
+    --black: #191414;  
+    /* Text Colors  */
+    --white: #ffffff;
+    --gray: #bbbbbb;
+    /* Component Colors */
+    --red: #b9541d;
+    --green: #1db954;
+    --blue: #541db9;
+}
