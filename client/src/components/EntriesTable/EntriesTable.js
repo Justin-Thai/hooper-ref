@@ -15,7 +15,6 @@ function EntriesTable({ header, entries }) {
 
 	let sortHandler = (event) => {
 		const option = event.target;
-		console.log(option);
 		if (option.matches("#dropdownOptions li")) {
 			const index = Array.prototype.indexOf.call(option.parentElement.children, option);
 			const currentIsAscending = option.classList.contains("li-sort-asc");

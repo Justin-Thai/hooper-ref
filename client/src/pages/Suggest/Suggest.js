@@ -1,5 +1,6 @@
 import './Suggest.css'
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -8,6 +9,8 @@ import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 
 function Suggest() {
+    const navigate = useNavigate();
+    const [success, setSuccess] = useState(false);
 
     const initialValues = {
         song: "",
@@ -39,7 +42,7 @@ function Suggest() {
         album: Yup.string()
             .min(1)
             .required("Album is required!")
-            ,
+        ,
         year: Yup.number()
             .typeError("Please enter a year number!")
             .integer()
@@ -55,98 +58,107 @@ function Suggest() {
 
     const onSubmit = (data) => {
         axios.post("http://localhost:3001/entries", data).then((response) => {
-            console.log("SUCCESS!");
+            setSuccess(true);
         });
     };
 
     return (
         <div className="suggest-page">
-            <div className="suggest-description">
-                Please fill the indicated fields for the song suggestion and an 
-                admin will take a look at it.
-            </div>
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validationSchema={validationSchema}
-            >
-                <Form className="form-container">
-                    <div className="form-item">
-                        <label>Song</label>
-                        <ErrorMessage name="song" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-suggest"
-                            name="song"
-                            placeholder="Song Name"
-                        />
+            {success ? (
+                <>
+                    <div className="success-text">Your suggestion has been submitted and is under review.</div>
+                    <button className="home-button" onClick={() => navigate(`/`)}>Back to Home</button>
+                </>
+            ) : (
+                <>
+                    <div className="suggest-description">
+                        Please fill the indicated fields for the song suggestion and an
+                        admin will take a look at it.
                     </div>
-                    <div className="form-item">
-                        <label>Artist(s)</label>
-                        <ErrorMessage name="artist" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-suggest"
-                            name="artist"
-                            placeholder="Artist Name(s)"
-                        />
-                    </div>
-                    <div className="form-item">
-                        <label>Player Referenced</label>
-                        <ErrorMessage name="player" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-suggest"
-                            name="player"
-                            placeholder="Player Name"
-                        />
-                    </div>
-                    <div className="form-item">
-                        <label>Spotify Link</label>
-                        <ErrorMessage name="link" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-suggest"
-                            name="link"
-                            placeholder="Spotify Song Link"
-                        />
-                    </div>
-                    <div className="form-item">
-                        <label>Album</label>
-                        <ErrorMessage name="album" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-suggest"
-                            name="album"
-                            placeholder="Album Name"
-                        />
-                    </div>
-                    <div className="form-item">
-                        <label>Year</label>
-                        <ErrorMessage name="year" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-suggest"
-                            name="year"
-                            placeholder="Year"
-                        />
-                    </div>
-                    <div className="form-item">
-                        <label>Excerpt</label>
-                        <ErrorMessage name="excerpt" component="span" className="form-error" />
-                        <Field
-                            autoComplete="off"
-                            id="input-excerpt"
-                            name="excerpt"
-                            placeholder="Song Excerpt"
-                            as="textarea"
-                        />
-                    </div>
-                    <div className="form-button">
-                        <button type="submit">Suggest<FontAwesomeIcon icon={faLightbulb} class="icon-lightbulb" /></button>
-                    </div>
-                </Form>
-            </Formik>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={onSubmit}
+                        validationSchema={validationSchema}
+                    >
+                        <Form className="form-container">
+                            <div className="form-item">
+                                <label>Song</label>
+                                <ErrorMessage name="song" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-suggest"
+                                    name="song"
+                                    placeholder="Song Name"
+                                />
+                            </div>
+                            <div className="form-item">
+                                <label>Artist(s)</label>
+                                <ErrorMessage name="artist" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-suggest"
+                                    name="artist"
+                                    placeholder="Artist Name(s)"
+                                />
+                            </div>
+                            <div className="form-item">
+                                <label>Player Referenced</label>
+                                <ErrorMessage name="player" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-suggest"
+                                    name="player"
+                                    placeholder="Player Name"
+                                />
+                            </div>
+                            <div className="form-item">
+                                <label>Spotify Link</label>
+                                <ErrorMessage name="link" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-suggest"
+                                    name="link"
+                                    placeholder="Spotify Song Link"
+                                />
+                            </div>
+                            <div className="form-item">
+                                <label>Album</label>
+                                <ErrorMessage name="album" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-suggest"
+                                    name="album"
+                                    placeholder="Album Name"
+                                />
+                            </div>
+                            <div className="form-item">
+                                <label>Year</label>
+                                <ErrorMessage name="year" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-suggest"
+                                    name="year"
+                                    placeholder="Year"
+                                />
+                            </div>
+                            <div className="form-item">
+                                <label>Excerpt</label>
+                                <ErrorMessage name="excerpt" component="span" className="form-error" />
+                                <Field
+                                    autoComplete="off"
+                                    id="input-excerpt"
+                                    name="excerpt"
+                                    placeholder="Song Excerpt"
+                                    as="textarea"
+                                />
+                            </div>
+                            <div className="form-button">
+                                <button type="submit">Suggest<FontAwesomeIcon icon={faLightbulb} class="icon-lightbulb" /></button>
+                            </div>
+                        </Form>
+                    </Formik>
+                </>
+            )}
         </div>
     )
 }

@@ -26,7 +26,7 @@ function NavBar() {
                 </Link>
                 <span className="pageTitle" onClick={() => navigate(`/`)}>HooperRef</span>
                 <div className="navbarButtonContainer">
-                    <button className="signOnButton" onClick={() => navigate(`/registration`)}>Sign Up</button>
+                    <button className="signOnButton" onClick={() => navigate(`/signup`)}>Sign Up</button>
                     <button className="signOnButton" onClick={() => navigate(`/login`)}>Sign In</button>
                 </div>
             </div>

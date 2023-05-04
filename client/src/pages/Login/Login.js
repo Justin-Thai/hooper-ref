@@ -1,21 +1,40 @@
 import './Login.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
-    const navigate = useNavigate();
+    const [errMsg, setErrMsg] = useState("");
 
     const signIn = () => {
-        const data = { username: username, password: password };
-        console.log(data);
+        if (!username) {
+            setErrMsg("No username was entered");
+        }
+        else if (!password) {
+            setErrMsg("No password was entered");
+        }
+        else {
+            const data = { username: username, password: password };
+
+            axios.post("http://localhost:3001/auth/login", data).then((response) => {
+                if (response.data.error) {
+                    setErrMsg(response.data.error);
+                }
+                else {
+                    // Create token
+                    console.log("Logged in");
+                }
+            });
+        }
     };
 
 
     return (
         <div className="login-page">
+            <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
             <label>Username</label>
             <input
                 type="text"
@@ -37,11 +56,11 @@ function Login() {
             <button className="login-button" onClick={signIn}>Sign In</button>
             <div className="subtext">
                 <span>Don't have an account?</span>
-                <span 
-                    className="subtext-clickable" 
-                    onClick={() => navigate(`/registration`)}
+                <span
+                    className="subtext-clickable"
+                    onClick={() => navigate(`/signup`)}
                 >
-                        Sign Up
+                    Sign Up
                 </span>
             </div>
         </div>

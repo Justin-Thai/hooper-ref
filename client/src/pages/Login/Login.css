@@ -64,3 +64,16 @@
     color: var(--black);
     background-color: var(--gray);
 }
+
+
+/* Error Message Components */
+
+.error-message {
+    font-size: 1.25rem;
+    color: var(--red);
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
