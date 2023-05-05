@@ -43,7 +43,7 @@ function Registration() {
     });
 
     const onSumbit = (data) => {
-        axios.post("http://localhost:3001/auth", data).then((response) => {
+        axios.post("http://localhost:3001/users", data).then((response) => {
             if (response.data.error) {
                 setErrMsg(response.data.error);
             }

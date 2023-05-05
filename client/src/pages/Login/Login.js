@@ -19,7 +19,7 @@ function Login() {
         else {
             const data = { username: username, password: password };
 
-            axios.post("http://localhost:3001/auth/login", data).then((response) => {
+            axios.post("http://localhost:3001/auth", data).then((response) => {
                 if (response.data.error) {
                     setErrMsg(response.data.error);
                 }
