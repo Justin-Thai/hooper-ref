@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const entriesController = require('../controllers/entriesController');
+const verifyJWT = require('../middlewares/verifyJWT');
 
 
 router.get('/', entriesController.getAllEntries);
 
-router.post('/', entriesController.createEntry);
+router.post('/', verifyJWT, entriesController.createEntry);
 
 router.get('/searchItems', entriesController.getSearchItems);
 

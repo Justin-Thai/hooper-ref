@@ -8,26 +8,25 @@ const bcrypt = require('bcryptjs');
 const createUser = async (req, res) => {
     const { username, password, email } = req.body;
 
-    const userCheck = await Users.findOne({ where: {username: username} });
-    const emailCheck = await Users.findOne({ where: {email: email} });
+    const userCheck = await Users.findOne({ where: { username: username } });
+    const emailCheck = await Users.findOne({ where: { email: email } });
 
     if (userCheck) {
-        res.json({ error: "Username already taken." });
+        return res.status(409).json({ error: "Username already taken." });
     }
     else if (emailCheck) {
-        res.json({ error: "Email is already being used."});
+        return res.status(409).json({ error: "Email is already being used." });
     }
-    else {
-        bcrypt.hash(password, 10).then((hash) => {
-            Users.create({
-                username: username,
-                password: hash,
-                email: email,
-            });
-    
-            res.json("SUCCESS");
+
+    bcrypt.hash(password, 10).then((hash) => {
+        Users.create({
+            username: username,
+            password: hash,
+            email: email,
         });
-    }
+
+        return res.status(201).json("SUCCESS");
+    });
 }
 
 

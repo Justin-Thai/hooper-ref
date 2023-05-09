@@ -7,7 +7,7 @@ const Op = Sequelize.Op;
 //
 const getAllEntries = async (req, res) => {
     const listOfEntries = await Entries.findAll();
-    res.json(listOfEntries);
+    return res.json(listOfEntries);
 }
 
 //  @desc Creates a new song entry
@@ -16,7 +16,7 @@ const getAllEntries = async (req, res) => {
 const createEntry = async (req, res) => {
     const entry = req.body;
     await Entries.create(entry);
-    res.json(entry);
+    return res.status(201).json(entry);
 }
 
 //  @desc Gets all searchable items for use in search bar 
@@ -35,7 +35,7 @@ const getSearchItems = async (req, res) => {
         artists.forEach(a => resList.add(a));
     });
 
-    res.json([...resList]);
+    return res.json([...resList]);
 }
 
 //  @desc Gets all song entries based on search query 
@@ -69,7 +69,7 @@ const getSearchResults = async (req, res) => {
         }
     });
 
-    res.json(listOfEntries);
+    return res.json(listOfEntries);
 }
 
 //  @desc Gets number of unique players in database
@@ -81,7 +81,7 @@ const getPlayerCount = async (req, res) => {
             [Sequelize.literal('COUNT(DISTINCT(player))'), 'playerCounter']
         ]
     });
-    res.json(numPlayers);
+    return res.json(numPlayers);
 }
 
 

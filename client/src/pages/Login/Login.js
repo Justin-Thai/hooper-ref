@@ -10,25 +10,17 @@ function Login() {
     const [errMsg, setErrMsg] = useState("");
 
     const signIn = () => {
-        if (!username) {
-            setErrMsg("No username was entered");
-        }
-        else if (!password) {
-            setErrMsg("No password was entered");
-        }
-        else {
-            const data = { username: username, password: password };
+        const data = { username: username, password: password };
 
-            axios.post("http://localhost:3001/auth", data).then((response) => {
-                if (response.data.error) {
-                    setErrMsg(response.data.error);
-                }
-                else {
-                    // Create token
-                    console.log("Logged in");
-                }
-            });
-        }
+        axios.post("http://localhost:3001/auth", data).then((response) => {
+            if (response.data.error) {
+                setErrMsg(response.data.error);
+            }
+            else {
+                // Create token and return to home
+                console.log("Logged in");
+            }
+        });
     };
 
 
