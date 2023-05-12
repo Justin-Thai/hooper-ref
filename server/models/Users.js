@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING, 
             defaultValue: "user"
         },
+        refreshToken: {
+            type: DataTypes.STRING
+        },
     });
 
     // Users.associate = (models) => {

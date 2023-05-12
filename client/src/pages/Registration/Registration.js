@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import axios from '../../api/axios';
 
 function Registration() {
     const navigate = useNavigate();
@@ -43,9 +43,9 @@ function Registration() {
     });
 
     const onSumbit = (data) => {
-        axios.post("http://localhost:3001/users", data).then((response) => {
-            if (response.data.error) {
-                setErrMsg(response.data.error);
+        axios.post("/users", data).then((response) => {
+            if (response.data.message) {
+                setErrMsg(response.data.message);
             }
             else {
                 setSuccess(true);

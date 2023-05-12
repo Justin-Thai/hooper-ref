@@ -1,10 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
+const credentials = require('./middlewares/credentials');
 const cookieParser = require('cookie-parser');
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
-app.use(cors());
+app.use(credentials);
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 const db = require('./models');
@@ -19,7 +24,7 @@ app.use('/auth', authRouter);
 
 
 db.sequelize.sync().then(() => {
-    app.listen(3001, () => {
-        console.log("Server running on port 3001");
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
     });
 });

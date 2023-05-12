@@ -2,13 +2,13 @@ import './Home.css'
 import backgroundGIF from '../../assets/NBAStadium.gif';
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import axios from 'axios';
+import axios from '../../api/axios';
 
 function Home() {
 	const [listOfItems, setListOfItems] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://localhost:3001/entries/searchItems").then((response) => {
+		axios.get("/entries/searchItems").then((response) => {
 			setListOfItems(response.data);
 		});
 	}, []);

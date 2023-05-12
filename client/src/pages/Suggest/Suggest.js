@@ -1,7 +1,7 @@
 import './Suggest.css'
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -57,7 +57,7 @@ function Suggest() {
     });
 
     const onSubmit = (data) => {
-        axios.post("http://localhost:3001/entries", data).then((response) => {
+        axios.post("/entries", data).then((response) => {
             setSuccess(true);
         });
     };

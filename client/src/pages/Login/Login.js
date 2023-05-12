@@ -1,7 +1,7 @@
 import './Login.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../api/axios';
 
 function Login() {
     const navigate = useNavigate();
@@ -12,9 +12,9 @@ function Login() {
     const signIn = () => {
         const data = { username: username, password: password };
 
-        axios.post("http://localhost:3001/auth", data).then((response) => {
-            if (response.data.error) {
-                setErrMsg(response.data.error);
+        axios.post("/auth", data).then((response) => {
+            if (response.data.message) {
+                setErrMsg(response.data.message);
             }
             else {
                 // Create token and return to home
