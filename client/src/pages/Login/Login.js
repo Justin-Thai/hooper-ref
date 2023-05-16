@@ -1,26 +1,42 @@
 import './Login.css';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
+import useAuth from '../../hooks/useAuth';
 
 function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+    const { setAuth } = useAuth();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState("");
 
-    const signIn = () => {
+    const signIn = async () => {
         const data = { username: username, password: password };
 
-        axios.post("/auth", data).then((response) => {
-            if (response.data.message) {
-                setErrMsg(response.data.message);
+        try {
+            await axios.post("/auth", data).then((response) => {
+                const role = response?.data?.role;
+                const accessToken = response?.data?.accessToken;
+    
+                setAuth({ username, password, role, accessToken });
+                setUsername('');
+                setPassword('');
+                setErrMsg('');
+                console.log(response.data);
+                navigate(from, { replace: true }); 
+            });
+        }
+        catch (err) {
+            if (!err?.response) {
+                setErrMsg('No server response');
             }
             else {
-                // Create token and return to home
-                console.log("Logged in");
+                setErrMsg(err.response?.data?.message);
             }
-        });
+        }
     };
 
 

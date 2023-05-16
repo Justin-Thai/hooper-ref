@@ -7,10 +7,10 @@ import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
-
 function Suggest() {
     const navigate = useNavigate();
     const [success, setSuccess] = useState(false);
+    const [errMsg, setErrMsg] = useState("");
 
     const initialValues = {
         song: "",
@@ -56,10 +56,21 @@ function Suggest() {
         ,
     });
 
-    const onSubmit = (data) => {
-        axios.post("/entries", data).then((response) => {
-            setSuccess(true);
-        });
+    const onSubmit = async (data) => {
+        try {
+            await axios.post("/entries", data).then((response) => {
+                setErrMsg("");
+                setSuccess(true);
+            });
+        }
+        catch (err) {
+            if (!err?.response) {
+                setErrMsg('No server response');
+            }
+            else {
+                setErrMsg(err.response?.data?.message);
+            }
+        }
     };
 
     return (
@@ -75,6 +86,7 @@ function Suggest() {
                         Please fill the indicated fields for the song suggestion and an
                         admin will take a look at it.
                     </div>
+                    <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={onSubmit}
@@ -153,7 +165,7 @@ function Suggest() {
                                 />
                             </div>
                             <div className="form-button">
-                                <button type="submit">Suggest<FontAwesomeIcon icon={faLightbulb} class="icon-lightbulb" /></button>
+                                <button type="submit">Suggest<FontAwesomeIcon icon={faLightbulb} className="icon-lightbulb" /></button>
                             </div>
                         </Form>
                     </Formik>

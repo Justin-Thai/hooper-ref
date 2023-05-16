@@ -41,6 +41,7 @@ const login = async (req, res) => {
     );
 
     foundUser.refreshToken = refreshToken;
+    const role = foundUser.role;
     const result = await foundUser.save();
     console.log(result);
 
@@ -51,7 +52,7 @@ const login = async (req, res) => {
         maxAge: 7 * 24 * 60 * 60 * 1000,    // CHANGE IN DEPLOYMENT
     });
 
-    return res.json({ accessToken });
+    return res.json({ role, accessToken });
 }
 
 //  @desc Gets a refresh token

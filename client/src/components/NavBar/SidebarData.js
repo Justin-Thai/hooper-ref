@@ -11,7 +11,7 @@ export const SidebarData = [
     },
     {
         title: "Profile",
-        path: "/",
+        path: "/profile",
         icon: <FontAwesomeIcon icon={faUser} />,
         cName: "navText",
     },
@@ -28,8 +28,8 @@ export const SidebarData = [
         cName: "navText",
     },
     {
-        title: "Admin",
-        path: "/",
+        title: "Mod",
+        path: "/mod",
         icon: <FontAwesomeIcon icon={faHammer} />,
         cName: "navText",
     },

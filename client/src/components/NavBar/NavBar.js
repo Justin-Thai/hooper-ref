@@ -5,9 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { SidebarData } from './SidebarData';
 import { useClickOutside } from '../../util/Utils';
-
+import useAuth from '../../hooks/useAuth';
+import NavButtonsAuth from './NavButtonsAuth';
+import NavButtonsNoAuth from './NavButtonsNoAuth';
 
 function NavBar() {
+    const { auth } = useAuth();
     const [sidebar, setSidebar] = useState(false);
 
     const openSidebar = () => { setSidebar(!sidebar); }
@@ -25,10 +28,7 @@ function NavBar() {
                     <FontAwesomeIcon icon={faBars} onClick={openSidebar} />
                 </Link>
                 <span className="pageTitle" onClick={() => navigate(`/`)}>HooperRef</span>
-                <div className="navbarButtonContainer">
-                    <button className="signOnButton" onClick={() => navigate(`/signup`)}>Sign Up</button>
-                    <button className="signOnButton" onClick={() => navigate(`/login`)}>Sign In</button>
-                </div>
+                {auth?.accessToken ? <NavButtonsAuth /> : <NavButtonsNoAuth />}
             </div>
             <nav className={sidebar ? "navMenuActive" : "navMenu"}>
                 <ul className="navMenuItems" onClick={openSidebar}>

@@ -9,7 +9,7 @@ function Registration() {
     const navigate = useNavigate();
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
-    
+
     const MAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const USER_REGEX = /^(?=[A-z0-9-_]).{3,30}$/;
     const userReqString = "Username must be between 3 to 30 characters long. Alphanumeric characters, underscores, and hyphens allowed.";
@@ -42,15 +42,20 @@ function Registration() {
         ,
     });
 
-    const onSumbit = (data) => {
-        axios.post("/users", data).then((response) => {
-            if (response.data.message) {
-                setErrMsg(response.data.message);
+    const onSumbit = async (data) => {
+        try {
+            await axios.post("/users", data).then((response) => {
+                setSuccess(true);
+            });
+        }
+        catch (err) {
+            if (!err?.response) {
+                setErrMsg('No server response');
             }
             else {
-                setSuccess(true);
+                setErrMsg(err.response?.data?.message);
             }
-        });
+        }
     };
 
 
