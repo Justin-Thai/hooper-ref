@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouseChimney, faUser, faLightbulb, faBoxArchive, faHammer } from '@fortawesome/free-solid-svg-icons';
+import { faHouseChimney, faUser, faLightbulb, faBoxArchive, faHammer, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 
 export const SidebarData = [
     {
@@ -33,4 +33,10 @@ export const SidebarData = [
         icon: <FontAwesomeIcon icon={faHammer} />,
         cName: "navText",
     },
+    {
+        title: "Admin",
+        path: "/admin",
+        icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
+        cName: "navText",
+    }
 ];

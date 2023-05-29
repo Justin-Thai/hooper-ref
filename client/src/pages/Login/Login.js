@@ -1,5 +1,5 @@
 import './Login.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
@@ -8,7 +8,7 @@ function Login() {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
-    const { setAuth } = useAuth();
+    const { setAuth, persist, setPersist } = useAuth();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState("");
@@ -17,16 +17,21 @@ function Login() {
         const data = { username: username, password: password };
 
         try {
-            await axios.post("/auth", data).then((response) => {
+            await axios.post("/auth", data,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            ).then((response) => {
                 const role = response?.data?.role;
                 const accessToken = response?.data?.accessToken;
-    
+
                 setAuth({ username, password, role, accessToken });
                 setUsername('');
                 setPassword('');
                 setErrMsg('');
                 console.log(response.data);
-                navigate(from, { replace: true }); 
+                navigate(from, { replace: true });
             });
         }
         catch (err) {
@@ -38,6 +43,14 @@ function Login() {
             }
         }
     };
+
+    const togglePersist = () => {
+        setPersist(prev => !prev);
+    };
+
+    useEffect(() => {
+        localStorage.setItem("persist", persist);
+    }, [persist]);
 
 
     return (
@@ -62,6 +75,15 @@ function Login() {
                 <span className="subtext-clickable">Click Here</span>
             </div>
             <button className="login-button" onClick={signIn}>Sign In</button>
+            <div className="persist-check">
+                <input 
+                    type="checkbox" 
+                    id="persist"
+                    onChange={togglePersist}
+                    checked={persist}
+                />
+                <label htmlFor="persist">Trust this device</label>
+            </div>
             <div className="subtext">
                 <span>Don't have an account?</span>
                 <span

@@ -1,26 +1,21 @@
 import './NavBar.css';
-import React, { useContext } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from '../../api/axios';
-import AuthContext from '../../context/AuthProvider';
-import useAuth from '../../hooks/useAuth';
+import useLogout from '../../hooks/useLogout';
 
 function NavButtonsAuth() {
     let navigate = useNavigate();
-    const { auth } = useAuth();
-    const { setAuth } = useContext(AuthContext);
+    const logout = useLogout();
 
     const signOut = async () => {
-        await axios.post("/auth/logout").then((response) => {
-            setAuth({})
-            console.log("logged out");
-            navigate('/');
-        })
+        await logout();
+        console.log("logged out");
+        navigate('/');
     };
 
     return (
         <div className="navbarButtonContainer">
-            <span className="username" onClick={() => navigate('/profile')}>{auth.username}</span>
+            <span className="username" onClick={() => navigate('/profile')}>My Profile</span>
             <button className="navButton" onClick={signOut}>Sign Out</button>
         </div>
     )

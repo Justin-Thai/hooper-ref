@@ -1,145 +1,145 @@
 /* Entry Table Header Components */
 
 .entries-header-container {
-    width: 90vw;
-    height: auto;
-    display: flex;
-    align-items: center; 
-    justify-content: space-between;
-    margin: 25px auto 0px auto;
-  }
-  
-  .entries-header {
-    font-size: 2.5rem;
-  }
-  
-  /* Entry Table Dropdown Menu Components */
-  
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropbtn {
-    color: var(--white);
-    background-color: var(--blue);
-    width: 100px;
-    padding: 10px;
-    font-size: 1.25rem;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .dropdown-content {
-    display: none;
-  }
-  
-  .dropdown-content-active {
-    display: block;
-    position: absolute;
-    background-color: var(--black);
-    min-width: 150px;
-    right: 0;
-  }
-  
-  .dropdown-content-active li {
-    color: var(--white);
-    padding: 12px 15px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .dropdown-content-active li:hover {
-    background-color: var(--gray);
-    color: var(--black);
-  }
-  
-  #dropdown-options .li-sort-asc,
-  #dropdown-options .li-sort-desc {
-    color: var(--green);
-  }
-  
-  #dropdown-options .li-sort-asc:hover,
-  #dropdown-options .li-sort-desc:hover {
-    color: var(--black);
-  }
-  
-  #dropdown-options .li-sort-asc::after,
-  #dropdown-options .li-sort-desc::after {
-    margin-left: 10px;
-  }
-  
-  #dropdown-options .li-sort-asc::after {
-    content: "\2191";
-  }
-  
-  #dropdown-options .li-sort-desc::after {
-    content: "\2193";
-  }
-  
-  
-  /* Entry Table Components */
-  
-  .entry-table {
-    width: 90vw;
-    border-collapse: collapse;
-    margin: 0px auto;
-    text-align: left;
-    font-size: 1.25rem;
-    color: var(--gray);
-  }
-  
-  .entry-table thead th {
-    font-weight: normal;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--gray);
-  }
-  
-  .entry-table th, td {
-    padding: 15px 15px 0px 15px;
-  }
-  
-  .entry-table td {
-    height: 75px;
-  }
-  
-  .song-column {
-    width: 20%;
-  }
-  
-  .entry-song {
-    font-weight: 600;
-    color: var(--white);
-  }
-  
-  .album-column {
-    width: 15%;
-  }
-  
-  .entry-player {
-    width: 15%;
-  }
-  
-  .entry-player:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
-  .entry-excerpt {
-    width: 40%;
-    max-width: 400px;
-    font-style: italic;
-  }
-  
-  .icon-spotify {
-    width: 40px;
-    height: 40px;
-    color: var(--green);
-  }
-  
-  .icon-spotify:hover {
-    cursor: pointer;
-    color: var(--white);
-  }
+  width: 90vw;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px auto 0px auto;
+}
+
+.entries-header {
+  font-size: 2.5rem;
+}
+
+/* Entry Table Dropdown Menu Components */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  color: var(--white);
+  background-color: var(--blue);
+  width: 100px;
+  padding: 10px;
+  font-size: 1.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+}
+
+.dropdown-content-active {
+  display: block;
+  position: absolute;
+  background-color: var(--black);
+  min-width: 150px;
+  right: 0;
+}
+
+.dropdown-content-active li {
+  color: var(--white);
+  padding: 12px 15px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown-content-active li:hover {
+  background-color: var(--gray);
+  color: var(--black);
+}
+
+#dropdown-options .li-sort-asc,
+#dropdown-options .li-sort-desc {
+  color: var(--green);
+}
+
+#dropdown-options .li-sort-asc:hover,
+#dropdown-options .li-sort-desc:hover {
+  color: var(--black);
+}
+
+#dropdown-options .li-sort-asc::after,
+#dropdown-options .li-sort-desc::after {
+  margin-left: 10px;
+}
+
+#dropdown-options .li-sort-asc::after {
+  content: "\2191";
+}
+
+#dropdown-options .li-sort-desc::after {
+  content: "\2193";
+}
+
+
+/* Entry Table Components */
+
+.entry-table {
+  width: 90vw;
+  border-collapse: collapse;
+  margin: 0px auto;
+  text-align: left;
+  font-size: 1.25rem;
+  color: var(--gray);
+}
+
+.entry-table thead th {
+  font-weight: normal;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--gray);
+}
+
+.entry-table th, td {
+  padding: 15px 15px 0px 15px;
+}
+
+.entry-table td {
+  height: 75px;
+}
+
+.song-column {
+  width: 20%;
+}
+
+.entry-song {
+  font-weight: 600;
+  color: var(--white);
+}
+
+.album-column {
+  width: 15%;
+}
+
+.entry-player {
+  width: 15%;
+}
+
+.entry-player:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.entry-excerpt {
+  width: 40%;
+  max-width: 400px;
+  font-style: italic;
+}
+
+.icon-spotify {
+  width: 40px;
+  height: 40px;
+  color: var(--green);
+}
+
+.icon-spotify:hover {
+  cursor: pointer;
+  color: var(--white);
+}

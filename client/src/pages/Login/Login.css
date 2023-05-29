@@ -9,7 +9,7 @@
     padding-top: 125px;
 }
 
-.login-page label {
+.login-page > label {
     width: 300px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -17,7 +17,7 @@
     font-size: 2rem;
 }
 
-.login-page input {
+.login-page > input {
     width: 260px;
     height: 50px;
     margin-bottom: 10px;
@@ -63,6 +63,29 @@
     cursor: pointer;
     color: var(--black);
     background-color: var(--gray);
+}
+
+.persist-check {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.persist-check input {
+    height: 1rem;
+    width: 1rem;
+    cursor: pointer;
+}
+
+.persist-check label {
+    font-size: 1.2rem;
+    color: var(--gray);
+    margin: 0 0 0 5px;
+}
+
+.persist-check label:hover {
+    cursor: pointer;
 }
 
 

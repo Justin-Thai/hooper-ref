@@ -7,8 +7,10 @@ const verifyRoles = require('../middlewares/verifyRoles');
 
 router.route('/')
     .post(usersController.createUser)
-    .get(usersController.getAllUsers)
+    .get(verifyJWT, verifyRoles(ROLES_LIST.Admin), usersController.getAllUsers)
     .put(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod, ROLES_LIST.User), usersController.updateUser)
     // .delete(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod, ROLES_LIST.User), usersController.deleteUser);
 
+router.route('/mod/:id').put(verifyJWT, verifyRoles(ROLES_LIST.Admin), usersController.updateUserPrivilege);
+    
 module.exports = router;

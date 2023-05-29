@@ -31,7 +31,7 @@ const login = async (req, res) => {
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '1m' }    // CHANGE IN DEPLOYMENT
+        { expiresIn: '10s' }    // CHANGE IN DEPLOYMENT
     );
 
     const refreshToken = jwt.sign(
@@ -47,7 +47,7 @@ const login = async (req, res) => {
 
     res.cookie('jwt', refreshToken, {
         httpOnly: true,
-        // secure: true,   // UNCOMMENT IN DEPLOYMENT
+        secure: true,   // UNCOMMENT IN DEPLOYMENT
         sameSite: 'None',
         maxAge: 7 * 24 * 60 * 60 * 1000,    // CHANGE IN DEPLOYMENT
     });
@@ -85,18 +85,19 @@ const handleRefreshToken = async (req, res) => {
                 return res.status(401).json({ message: "Username not found." });
             }
 
+            const role = user.role;
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
                         "username": user.username,
-                        "role": user.role,
+                        "role": role,
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '1m' }    // CHANGE IN DEPLOYMENT
+                { expiresIn: '10s' }    // CHANGE IN DEPLOYMENT
             );
 
-            return res.json({ accessToken });
+            return res.json({ role, accessToken });
         }
     );
 }
@@ -119,7 +120,7 @@ const logout = async (req, res) => {
             {
                 httpOnly: true,
                 sameSite: 'None',
-                // secure: true,   // UNCOMMENT IN DEPLOYMENT
+                secure: true,   // UNCOMMENT IN DEPLOYMENT
             }
         );
 
@@ -134,7 +135,7 @@ const logout = async (req, res) => {
         {
             httpOnly: true,
             sameSite: 'None',
-            // secure: true,   // UNCOMMENT IN DEPLOYMENT
+            secure: true,   // UNCOMMENT IN DEPLOYMENT
         }
     );
 

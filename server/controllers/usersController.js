@@ -33,7 +33,7 @@ const createUser = async (req, res) => {
 //  @route GET /users
 //
 const getAllUsers = async (req, res) => {
-    const users = await Users.find();
+    const users = await Users.findAll();
     
     if (!users) {
         return res.status(204).json({ message: "No users found" });
@@ -95,10 +95,36 @@ const deleteUser = async (req, res) => {
     return;
 }
 
+//  @desc Updates a user's privilege
+//  @route PUT /users/mod/:id
+//
+const updateUserPrivilege = async (req, res) => {
+    if (!req?.params?.id) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+    
+    const user = await Users.findOne({ where: { id: req.params.id } });
+    if (!user) {
+        return res.status(204).json({ message: `No user matches ID ${req.params.id}.` });
+    }
+
+    const userRole = user.role;
+    
+    if (userRole === "mod") {
+        user.role = "user";
+    }
+    else if (userRole === "user") {
+        user.role = "mod";
+    }
+
+    const result = await user.save();
+    return res.json(result);
+}
 
 module.exports = {
     createUser,
     getAllUsers,
     updateUser,
     deleteUser,
+    updateUserPrivilege
 }

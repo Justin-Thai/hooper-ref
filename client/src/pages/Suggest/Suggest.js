@@ -1,7 +1,7 @@
 import './Suggest.css'
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../api/axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 function Suggest() {
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
     const [success, setSuccess] = useState(false);
     const [errMsg, setErrMsg] = useState("");
 
@@ -58,7 +59,12 @@ function Suggest() {
 
     const onSubmit = async (data) => {
         try {
-            await axios.post("/entries", data).then((response) => {
+            await axiosPrivate.post("/entries", data,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            ).then((response) => {
                 setErrMsg("");
                 setSuccess(true);
             });
@@ -78,7 +84,7 @@ function Suggest() {
             {success ? (
                 <>
                     <div className="success-text">Your suggestion has been submitted and is under review.</div>
-                    <button className="home-button" onClick={() => navigate(`/`)}>Back to Home</button>
+                    <button className="navigate-button" onClick={() => navigate(`/`)}>Back to Home</button>
                 </>
             ) : (
                 <>

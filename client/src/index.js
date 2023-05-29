@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthProvider';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PersistLogin from './components/PersistLogin';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +13,9 @@ root.render(
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/*" element={<App />} />
+          <Route element={<PersistLogin />}>
+            <Route path="/*" element={<App />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </Router>
