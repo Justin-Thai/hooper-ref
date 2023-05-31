@@ -1,0 +1,10 @@
+/* Mod Page Components */
+
+.mod-page {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 125px;
+}

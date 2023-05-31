@@ -1,25 +1,48 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Home, Login, Registration, Suggest, Archive, Search } from './pages';
-import NavBar from './components/NavBar/NavBar';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout';
+import RequireAuth from './components/RequireAuth';
+import { Home, Login, Registration, Suggest, Archive, Search, Profile, Mod, Admin, Unauthorized, Missing } from './pages';
+
+const ROLES = {
+	"User": "user",
+	"Mod": "mod",
+	"Admin": "admin"
+}
 
 function App() {
-	
+
 	return (
-		<Router>
-			<div className="App">
-				<NavBar />
-				
-				<Routes>
+		<div className="App">
+			<Routes>
+				<Route path="/" element={<Layout />}>
+					{/* Public routes */}
 					<Route exact path="/" element={<Home />} />
 					<Route exact path="/login" element={<Login />} />
 					<Route exact path="/signup" element={<Registration />} />
-					<Route exact path="/suggest" element={<Suggest />} />
 					<Route exact path="/archive" element={<Archive />} />
 					<Route exact path="/search" element={<Search />} />
-				</Routes>
-			</div>
-		</Router>
+					<Route exact path="/unauthorized" element={<Unauthorized />} />
+
+					{/* Protected routes */}
+						<Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Mod, ROLES.Admin]} />}>
+							<Route exact path="/profile" element={<Profile />} />
+							<Route exact path="/suggest" element={<Suggest />} />
+						</Route>
+
+						<Route element={<RequireAuth allowedRoles={[ROLES.Mod, ROLES.Admin]} />}>
+							<Route exact path="/mod" element={<Mod />} />
+						</Route>
+
+						<Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+							<Route exact path="/admin" element={<Admin />} />
+						</Route>
+
+					{/* Missing page route */}
+					<Route path="*" element={<Missing />} />
+				</Route>
+			</Routes>
+		</div>
 	);
 }
 

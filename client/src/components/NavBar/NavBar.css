@@ -34,10 +34,11 @@
     right: 0%;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     margin-right: 2rem;
 }
 
-.signOnButton {
+.navButton {
     height: 32px;
     width: 100px;
     margin-top: 5px;
@@ -49,10 +50,20 @@
     border-color: transparent;
 }
 
-.signOnButton:hover {
+.navButton:hover {
     cursor: pointer;
     color: var(--black);
     background-color: var(--gray);
+}
+
+.username {
+    margin-bottom: 5px;
+    font-size: 1.25rem;   
+}
+
+.username:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .navMenu, .navMenuActive {

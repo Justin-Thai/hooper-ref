@@ -1,33 +1,48 @@
 import './Login.css';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from '../../api/axios';
+import useAuth from '../../hooks/useAuth';
+import useInput from '../../hooks/useInput';
+import useToggle from '../../hooks/useToggle';
 
 function Login() {
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+    const { setAuth } = useAuth();
+    const [username, resetUser, userAttributes] = useInput('user', '');
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState("");
+    const [check, toggleCheck] = useToggle('persist', false);
 
-    const signIn = () => {
-        if (!username) {
-            setErrMsg("No username was entered");
-        }
-        else if (!password) {
-            setErrMsg("No password was entered");
-        }
-        else {
-            const data = { username: username, password: password };
+    const signIn = async () => {
+        const data = { username: username, password: password };
 
-            axios.post("http://localhost:3001/auth/login", data).then((response) => {
-                if (response.data.error) {
-                    setErrMsg(response.data.error);
+        try {
+            await axios.post("/auth", data,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
                 }
-                else {
-                    // Create token
-                    console.log("Logged in");
-                }
+            ).then((response) => {
+                const accessToken = response?.data?.accessToken;
+
+                setAuth({ username, accessToken });
+                resetUser();
+                setPassword('');
+                setErrMsg('');
+                console.log(response.data);
+                navigate(from, { replace: true });
             });
+        }
+        catch (err) {
+            if (!err?.response) {
+                setErrMsg('No server response');
+            }
+            else {
+                setErrMsg(err.response?.data?.message);
+            }
         }
     };
 
@@ -38,9 +53,7 @@ function Login() {
             <label>Username</label>
             <input
                 type="text"
-                onChange={(event) => {
-                    setUsername(event.target.value);
-                }}
+                {...userAttributes}
             />
             <label>Password</label>
             <input
@@ -54,6 +67,15 @@ function Login() {
                 <span className="subtext-clickable">Click Here</span>
             </div>
             <button className="login-button" onClick={signIn}>Sign In</button>
+            <div className="persist-check">
+                <input 
+                    type="checkbox" 
+                    id="persist"
+                    onChange={toggleCheck}
+                    checked={check}
+                />
+                <label htmlFor="persist">Trust this device</label>
+            </div>
             <div className="subtext">
                 <span>Don't have an account?</span>
                 <span

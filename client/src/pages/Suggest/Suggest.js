@@ -1,16 +1,17 @@
 import './Suggest.css'
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
-
 function Suggest() {
     const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
     const [success, setSuccess] = useState(false);
+    const [errMsg, setErrMsg] = useState("");
 
     const initialValues = {
         song: "",
@@ -56,10 +57,26 @@ function Suggest() {
         ,
     });
 
-    const onSubmit = (data) => {
-        axios.post("http://localhost:3001/entries", data).then((response) => {
-            setSuccess(true);
-        });
+    const onSubmit = async (data) => {
+        try {
+            await axiosPrivate.post("/entries", data,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            ).then((response) => {
+                setErrMsg("");
+                setSuccess(true);
+            });
+        }
+        catch (err) {
+            if (!err?.response) {
+                setErrMsg('No server response');
+            }
+            else {
+                setErrMsg(err.response?.data?.message);
+            }
+        }
     };
 
     return (
@@ -67,7 +84,7 @@ function Suggest() {
             {success ? (
                 <>
                     <div className="success-text">Your suggestion has been submitted and is under review.</div>
-                    <button className="home-button" onClick={() => navigate(`/`)}>Back to Home</button>
+                    <button className="navigate-button" onClick={() => navigate(`/`)}>Back to Home</button>
                 </>
             ) : (
                 <>
@@ -75,6 +92,7 @@ function Suggest() {
                         Please fill the indicated fields for the song suggestion and an
                         admin will take a look at it.
                     </div>
+                    <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={onSubmit}
@@ -153,7 +171,7 @@ function Suggest() {
                                 />
                             </div>
                             <div className="form-button">
-                                <button type="submit">Suggest<FontAwesomeIcon icon={faLightbulb} class="icon-lightbulb" /></button>
+                                <button type="submit">Suggest<FontAwesomeIcon icon={faLightbulb} className="icon-lightbulb" /></button>
                             </div>
                         </Form>
                     </Formik>

@@ -1,0 +1,97 @@
+/* Admin Page Components */
+
+.admin-page {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 125px;
+}
+
+.admin-page-description {
+    width: 90%;
+    height: 20%;
+    padding-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.admin-page-description div {
+    margin-bottom: 10px;
+}
+
+
+/* Error Message Components */
+
+.error-message {
+    font-size: 1.25rem;
+    color: var(--red);
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+
+/* Users Table Header Components */
+
+.users-table-header-container {
+    width: 90vw;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px auto 0px auto;
+}
+
+.users-table-header {
+    font-size: 2.5rem;
+}
+
+
+/* Users Table Components */
+
+.users-table {
+    width: 90vw;
+    border-collapse: collapse;
+    margin: 0px auto;
+    text-align: left;
+    font-size: 1.25rem;
+    color: var(--gray);
+}
+
+.users-table thead th {
+    font-weight: normal;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--gray);
+}
+
+.users-table th,
+td {
+    padding: 15px 15px 0px 15px;
+}
+
+.users-table-name-header {
+    width: 45%;
+}
+
+.users-table-since-header {
+    width: 25%;
+}
+
+.users-table-total-header {
+    width: 25%;
+}
+
+.icon-role {
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+    color: var(--gray);
+}
+
+.icon-role:hover {
+    cursor: pointer;
+    color: var(--white);
+}

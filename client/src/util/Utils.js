@@ -1,28 +1,3 @@
-import { useEffect, useRef } from 'react';
-
-/* 
- * Checks if a click is inside or outside the HTML element
-*/
-const useClickOutside = (handler) => {
-    let domNode = useRef();
-
-    useEffect((event) => {
-        let clickHandler = (event) => {
-            if(!domNode.current.contains(event.target)) {
-                handler();
-            }
-        };
-
-        document.addEventListener("click", clickHandler);
-        
-        return () => {
-            document.removeEventListener("click", clickHandler);
-        };
-    });
-
-    return domNode;
-}
-
 /*
  * Sorts a list of entries based on the indicated category
  * 
@@ -43,4 +18,4 @@ function sortEntriesByCat(entries, index, asc = true) {
     });
 }
 
-export { useClickOutside, sortEntriesByCat };
+export { sortEntriesByCat };

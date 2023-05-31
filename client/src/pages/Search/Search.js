@@ -1,5 +1,5 @@
 import './Search.css';
-import axios from 'axios';
+import axios from '../../api/axios';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -17,11 +17,11 @@ function Search() {
     const [listOfItems, setListOfItems] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:3001/entries/search?q=${query}`).then((response) => {
+        axios.get(`/entries/search?q=${query}`).then((response) => {
             setSearchResults(response.data);
         });
 
-		axios.get("http://localhost:3001/entries/searchItems").then((response) => {
+		axios.get("/entries/searchItems").then((response) => {
 			setListOfItems(response.data);
 		});
     }, []);

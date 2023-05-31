@@ -2,8 +2,8 @@ import './EntriesTable.css';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
-import { useClickOutside, sortEntriesByCat } from '../../util/Utils';
-
+import { sortEntriesByCat } from '../../util/Utils';
+import useClickOutside from '../../hooks/useClickOutside';
 
 function EntriesTable({ header, entries }) {
 	let listOfEntries = entries;
@@ -15,14 +15,14 @@ function EntriesTable({ header, entries }) {
 
 	let sortHandler = (event) => {
 		const option = event.target;
-		if (option.matches("#dropdownOptions li")) {
+		if (option.matches("#dropdown-options li")) {
 			const index = Array.prototype.indexOf.call(option.parentElement.children, option);
 			const currentIsAscending = option.classList.contains("li-sort-asc");
 
 			sortEntriesByCat(listOfEntries, index, !currentIsAscending);
 
 			// Updating dropdown option items
-			option.closest("#dropdownOptions")
+			option.closest("#dropdown-options")
 				.querySelectorAll("li")
 				.forEach(li => li.classList.remove("li-sort-asc", "li-sort-desc"));
 			option.classList.toggle("li-sort-asc", !currentIsAscending);
@@ -31,7 +31,7 @@ function EntriesTable({ header, entries }) {
 	}
 
 	const sortEntries = () => {
-		const element = document.getElementById("dropdownOptions");		// PROBLEM HERE (Always returns null)
+		const element = document.getElementById("dropdown-options");
 		element.addEventListener("click", sortHandler, { once: true });
 
 		setSortDropdown(false);
@@ -72,7 +72,7 @@ function EntriesTable({ header, entries }) {
 				<tbody>
 					{listOfEntries.map((value) => {
 						return (
-							<tr>
+							<tr key={value.id}>
 								<td></td>
 								<td className="song-column">
 									<div className="entry-song">{value.song}</div>

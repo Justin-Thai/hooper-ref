@@ -1,6 +1,6 @@
 import './Archive.css';
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import axios from '../../api/axios';
 import EntriesTable from '../../components/EntriesTable/EntriesTable';
 
 function Archive() {
@@ -8,11 +8,11 @@ function Archive() {
     const [numPlayers, setNumPlayers] = useState(0);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/entries").then((response) => {
+        axios.get("/entries").then((response) => {
             setListOfEntries(response.data);
         });
 
-        axios.get("http://localhost:3001/entries/playerCount").then((response) => {
+        axios.get("/entries/playerCount").then((response) => {
             setNumPlayers(response.data[0].playerCounter);
         });
     }, []);
