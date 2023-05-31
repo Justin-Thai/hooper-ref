@@ -31,7 +31,7 @@ const login = async (req, res) => {
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '10s' }    // CHANGE IN DEPLOYMENT
+        { expiresIn: '10m' }    // CHANGE IN DEPLOYMENT
     );
 
     const refreshToken = jwt.sign(
@@ -52,7 +52,7 @@ const login = async (req, res) => {
         maxAge: 7 * 24 * 60 * 60 * 1000,    // CHANGE IN DEPLOYMENT
     });
 
-    return res.json({ role, accessToken });
+    return res.json({ accessToken });
 }
 
 //  @desc Gets a refresh token
@@ -94,10 +94,10 @@ const handleRefreshToken = async (req, res) => {
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '10s' }    // CHANGE IN DEPLOYMENT
+                { expiresIn: '10m' }    // CHANGE IN DEPLOYMENT
             );
 
-            return res.json({ role, accessToken });
+            return res.json({ accessToken });
         }
     );
 }

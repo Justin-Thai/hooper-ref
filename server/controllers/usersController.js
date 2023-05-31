@@ -33,7 +33,9 @@ const createUser = async (req, res) => {
 //  @route GET /users
 //
 const getAllUsers = async (req, res) => {
-    const users = await Users.findAll();
+    const users = await Users.findAll({
+        attributes: {exclude: ['password', 'email', 'refreshToken', 'updatedAt']}
+    });
     
     if (!users) {
         return res.status(204).json({ message: "No users found" });

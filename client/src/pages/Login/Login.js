@@ -1,17 +1,20 @@
 import './Login.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
+import useInput from '../../hooks/useInput';
+import useToggle from '../../hooks/useToggle';
 
 function Login() {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
-    const { setAuth, persist, setPersist } = useAuth();
-    const [username, setUsername] = useState("");
+    const { setAuth } = useAuth();
+    const [username, resetUser, userAttributes] = useInput('user', '');
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState("");
+    const [check, toggleCheck] = useToggle('persist', false);
 
     const signIn = async () => {
         const data = { username: username, password: password };
@@ -23,11 +26,10 @@ function Login() {
                     withCredentials: true
                 }
             ).then((response) => {
-                const role = response?.data?.role;
                 const accessToken = response?.data?.accessToken;
 
-                setAuth({ username, password, role, accessToken });
-                setUsername('');
+                setAuth({ username, accessToken });
+                resetUser();
                 setPassword('');
                 setErrMsg('');
                 console.log(response.data);
@@ -44,14 +46,6 @@ function Login() {
         }
     };
 
-    const togglePersist = () => {
-        setPersist(prev => !prev);
-    };
-
-    useEffect(() => {
-        localStorage.setItem("persist", persist);
-    }, [persist]);
-
 
     return (
         <div className="login-page">
@@ -59,9 +53,7 @@ function Login() {
             <label>Username</label>
             <input
                 type="text"
-                onChange={(event) => {
-                    setUsername(event.target.value);
-                }}
+                {...userAttributes}
             />
             <label>Password</label>
             <input
@@ -79,8 +71,8 @@ function Login() {
                 <input 
                     type="checkbox" 
                     id="persist"
-                    onChange={togglePersist}
-                    checked={persist}
+                    onChange={toggleCheck}
+                    checked={check}
                 />
                 <label htmlFor="persist">Trust this device</label>
             </div>
