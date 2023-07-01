@@ -26,6 +26,7 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
         {
             "UserInfo": {
+                "id": foundUser.id,
                 "username": foundUser.username,
                 "role": foundUser.role,
             }
@@ -41,7 +42,6 @@ const login = async (req, res) => {
     );
 
     foundUser.refreshToken = refreshToken;
-    const role = foundUser.role;
     const result = await foundUser.save();
     console.log(result);
 
@@ -89,6 +89,7 @@ const handleRefreshToken = async (req, res) => {
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
+                        "id": user.id,
                         "username": user.username,
                         "role": role,
                     }

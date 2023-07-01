@@ -37,6 +37,9 @@ function EntriesTable({ header, entries }) {
 		setSortDropdown(false);
 	};
 
+	const goToPlayerPage = (code) => {
+		window.open(`https://www.basketball-reference.com/players/${code.charAt(0)}/${code}.html`)
+	}
 
 	return (
 		<div>
@@ -82,7 +85,11 @@ function EntriesTable({ header, entries }) {
 									<div className="entry-album">{value.album}</div>
 									<div>({value.year})</div>
 								</td>
-								<td className="entry-player">{value.player}</td>
+								<td className="entry-player"
+									onClick={() => goToPlayerPage(value.Player.playerCode)}
+								>
+									{value.Player.name}
+								</td>
 								<td className="entry-excerpt">"{value.excerpt}"</td>
 								<td>
 									<div onClick={() => {

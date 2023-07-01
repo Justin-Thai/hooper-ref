@@ -20,17 +20,16 @@
 .form-container {
     width: 100%;
     max-width: 1000px;
-    display: grid;
-    grid-template-rows: repeat(4, 25%);
-    grid-template-columns: repeat(2, 50%);
-    grid-gap: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-container .form-item {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
 } 
 
 .form-container #input-suggest {
@@ -45,27 +44,17 @@
     outline: none;
 }
 
-.form-container #input-excerpt {
-    height: 150px;
-    width: 80%;
-    max-width: 400px;
-    font-size: 1rem;
-    border-style: none;
-    border-radius: 20px;
-    padding-left: 15px;
-    padding-right: 15px;
-    outline: none;
-}
-
-textarea {
+.form-container textarea {
     font-family: sans-serif, Helvetica, Arial;
 }
 
-label {
+.form-container label {
+    font-size: 1.15rem;
     margin-bottom: 5px;
 }
 
 .form-error {
+    font-size: 1rem;
     color: var(--red);
     margin-bottom: 5px;
 }

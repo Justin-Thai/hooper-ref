@@ -8,7 +8,7 @@ const verifyRoles = require('../middlewares/verifyRoles');
 
 router.route('/')
     .get(entriesController.getAllEntries)
-    .post(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod, ROLES_LIST.User), entriesController.createEntry)
+    .post(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.createEntry)
     .put(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.updateEntry)
     .delete(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.deleteEntry);
 

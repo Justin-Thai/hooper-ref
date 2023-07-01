@@ -17,10 +17,7 @@ function Suggest() {
         song: "",
         artist: "",
         player: "",
-        link: "",
-        album: "",
-        year: "",
-        excerpt: "",
+        link: ""
     };
 
     const validationSchema = Yup.object().shape({
@@ -38,28 +35,11 @@ function Suggest() {
         ,
         link: Yup.string()
             .min(10, "Link must be at least 10 characters!")
-            .required("Link is required!")
-        ,
-        album: Yup.string()
-            .min(1)
-            .required("Album is required!")
-        ,
-        year: Yup.number()
-            .typeError("Please enter a year number!")
-            .integer()
-            .min(1946, "Year must be between 1946 and 2023")
-            .max(2023, "Year must be between 1946 and 2023")
-            .required("Year is required!")
-        ,
-        excerpt: Yup.string()
-            .min(5, "Excerpt must be at least 5 characters!")
-            .required("Excerpt is required!")
-        ,
     });
 
     const onSubmit = async (data) => {
         try {
-            await axiosPrivate.post("/entries", data,
+            await axiosPrivate.post("/submissions", data,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -89,8 +69,8 @@ function Suggest() {
             ) : (
                 <>
                     <div className="suggest-description">
-                        Please fill the indicated fields for the song suggestion and an
-                        admin will take a look at it.
+                        Please fill the indicated fields for the song suggestion and a mod will review it.
+                        If a song has references to multiple players, please individually submit a reference for each player.
                     </div>
                     <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                     <Formik
@@ -130,44 +110,13 @@ function Suggest() {
                                 />
                             </div>
                             <div className="form-item">
-                                <label>Spotify Link</label>
+                                <label>Spotify Link (optional)</label>
                                 <ErrorMessage name="link" component="span" className="form-error" />
                                 <Field
                                     autoComplete="off"
                                     id="input-suggest"
                                     name="link"
                                     placeholder="Spotify Song Link"
-                                />
-                            </div>
-                            <div className="form-item">
-                                <label>Album</label>
-                                <ErrorMessage name="album" component="span" className="form-error" />
-                                <Field
-                                    autoComplete="off"
-                                    id="input-suggest"
-                                    name="album"
-                                    placeholder="Album Name"
-                                />
-                            </div>
-                            <div className="form-item">
-                                <label>Year</label>
-                                <ErrorMessage name="year" component="span" className="form-error" />
-                                <Field
-                                    autoComplete="off"
-                                    id="input-suggest"
-                                    name="year"
-                                    placeholder="Year"
-                                />
-                            </div>
-                            <div className="form-item">
-                                <label>Excerpt</label>
-                                <ErrorMessage name="excerpt" component="span" className="form-error" />
-                                <Field
-                                    autoComplete="off"
-                                    id="input-excerpt"
-                                    name="excerpt"
-                                    placeholder="Song Excerpt"
-                                    as="textarea"
                                 />
                             </div>
                             <div className="form-button">
