@@ -1,4 +1,5 @@
 import './Admin.css';
+import Modal from '../../components/Modal/Modal';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -7,9 +8,11 @@ import { faHammer, faScrewdriverWrench, faBasketball } from '@fortawesome/free-s
 
 function Admin() {
 	const effectRan = useRef(false);
+	const [openModal, setOpenModal] = useState(false);
 	const [users, setUsers] = useState([]);
 	const [success, setSuccess] = useState(false);
 	const [errMsg, setErrMsg] = useState("");
+	const [changedId, setChangedId] = useState(-1);
 	const [changedUser, setChangedUser] = useState("");
 	const [changedRole, setChangedRole] = useState("");
 	const axiosPrivate = useAxiosPrivate();
@@ -25,7 +28,6 @@ function Admin() {
 				const response = await axiosPrivate.get('/users', {
 					signal: controller.signal
 				});
-
 				console.log(response.data);
 				isMounted && setUsers(response.data);
 			}
@@ -45,6 +47,11 @@ function Admin() {
 			effectRan.current = true;
 		}
 	}, []);
+
+	const openConfirmation = (id) => {
+		setOpenModal(true);
+		setChangedId(id);
+	}
 
 	const handleIconClick = async (id) => {
 		try {
@@ -105,9 +112,9 @@ function Admin() {
 										<td></td>
 										<td>{value.username}</td>
 										<td>{value.createdAt.split('T')[0]}</td>
-										<td>0</td>
+										<td>{value.numEntries}</td>
 										<td>
-											<div onClick={() => handleIconClick(value.id)}>
+											<div onClick={() => openConfirmation(value.id)}>
 												{value.role === "user"
 													? <FontAwesomeIcon className="icon-role" icon={faBasketball} />
 													: value.role === "mod"
@@ -121,6 +128,7 @@ function Admin() {
 							})}
 						</tbody>
 					</table>
+					{openModal && <Modal closeModal={setOpenModal} continueAction={() => handleIconClick(changedId)} />}
 				</>
 			)}
 		</div>
