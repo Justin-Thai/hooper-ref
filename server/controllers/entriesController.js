@@ -10,13 +10,11 @@ const getAllEntries = async (req, res) => {
     return res.json(listOfEntries);
 }
 
-/***** UPDATE *****/
 //  @desc Creates a new song entry
 //  @route POST /entries
 //
 const createEntry = async (req, res) => {
     const entry = req.body;
-    // Find PlayerId using playerCode and add it to entry 
     await Entries.create(entry);
     return res.status(201).json(entry);
 }

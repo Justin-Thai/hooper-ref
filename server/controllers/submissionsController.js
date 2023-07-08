@@ -4,7 +4,22 @@ const { Submissions, Users } = require('../models');
 // @route GET /submissions
 //
 const getAllSubs = async (req, res) => {
-    const listOfSubs = await Submissions.findAll();
+    const listOfSubs = await Submissions.findAll({
+        attributes: [
+            'id',
+            'song',
+            'artist',
+            'player',
+            'link',
+            'createdAt'
+        ],
+        include: [
+            {
+                model: Users,
+                attributes: ['id', 'username']
+            }
+        ]
+    });
     return res.json(listOfSubs);
 }
 

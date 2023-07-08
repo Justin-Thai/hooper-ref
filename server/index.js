@@ -19,6 +19,8 @@ const subsRouter = require('./routes/Submissions');
 app.use('/submissions', subsRouter);
 const entriesRouter = require('./routes/Entries');
 app.use('/entries', entriesRouter);
+const playersRouter = require('./routes/Players');
+app.use('/players', playersRouter);
 const usersRouter = require('./routes/Users');
 app.use('/users', usersRouter);
 const authRouter = require('./routes/Auth');

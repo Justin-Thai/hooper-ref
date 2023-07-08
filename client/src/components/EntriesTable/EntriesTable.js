@@ -64,12 +64,12 @@ function EntriesTable({ header, entries }) {
 			<table className="entry-table">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Title</th>
-						<th>Album</th>
-						<th>Player Ref.</th>
-						<th>Excerpt</th>
-						<th>Link</th>
+						<th className="entry-table-number">#</th>
+						<th className="entry-table-title">Title</th>
+						<th className="entry-table-album">Album</th>
+						<th className="entry-table-player">Player Ref.</th>
+						<th className="entry-table-excerpt">Excerpt</th>
+						<th className="entry-table-link">Link</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -77,21 +77,23 @@ function EntriesTable({ header, entries }) {
 						return (
 							<tr key={value.id}>
 								<td></td>
-								<td className="song-column">
+								<td>
 									<div className="entry-song">{value.song}</div>
 									<div>{value.artist}</div>
 								</td>
-								<td className="album-column">
-									<div className="entry-album">{value.album}</div>
+								<td>
+									<div>{value.album}</div>
 									<div>({value.year})</div>
 								</td>
-								<td className="entry-player"
-									onClick={() => goToPlayerPage(value.Player.playerCode)}
+								<td className="entry-player" 
+									onClick={
+										() => goToPlayerPage(value.Player.playerCode)
+									}
 								>
 									{value.Player.name}
 								</td>
 								<td className="entry-excerpt">"{value.excerpt}"</td>
-								<td>
+								<td className="entry-link">
 									<div onClick={() => {
 										window.open(value.link, "_blank");
 									}}>

@@ -12,6 +12,7 @@ function Suggest() {
     const axiosPrivate = useAxiosPrivate();
     const [success, setSuccess] = useState(false);
     const [errMsg, setErrMsg] = useState("");
+    const SPOTIFY_LINK_REGEX = /^.*spotify\.com\/track\/.*$/i;
 
     const initialValues = {
         song: "",
@@ -35,6 +36,8 @@ function Suggest() {
         ,
         link: Yup.string()
             .min(10, "Link must be at least 10 characters!")
+            .matches(SPOTIFY_LINK_REGEX, "Link must be a Spotify song link!")
+            .notRequired()
     });
 
     const onSubmit = async (data) => {

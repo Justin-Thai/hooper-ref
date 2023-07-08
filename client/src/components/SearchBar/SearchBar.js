@@ -1,12 +1,13 @@
 import './SearchBar.css';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import useClickOutside from '../../hooks/useClickOutside';
 
-function SearchBar({ placeholder, data, input }) {
+function SearchBar({ placeholder, data, input }) { 
 	let navigate = useNavigate();
+	const location = useLocation();
 	const [query, setQuery] = useState(input);
 	const [resultActive, setResultActive] = useState(false);
 
@@ -37,7 +38,9 @@ function SearchBar({ placeholder, data, input }) {
 		}
 		else {
 			navigate(`/search?q=${query}`);
-			navigate(0);	// Refresh page to show results
+			if (location.pathname.includes("search")) {
+				navigate(0);	// Refresh page to show results
+			}
 		}
 	}
 

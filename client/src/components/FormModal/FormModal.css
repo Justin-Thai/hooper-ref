@@ -1,0 +1,139 @@
+/* Form Modal Components */
+
+.form-modal-background {
+    width: 100%;
+    height: 100%;
+    background-color: var(--black);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-modal-container {
+    width: 75%;
+    height: 75%;
+    border: 2px solid var(--gray);
+    border-radius: 30px;
+    background-color: var(--black);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.form-modal-exit {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.form-modal-exit button {
+    color: var(--gray);
+    background-color: transparent;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+}
+
+.form-modal-exit button:hover {
+    color: var(--white);
+}
+
+
+/* Form Modal Body Components */
+
+.form-modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+}
+
+.formik-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(4, 25%);
+    grid-template-columns: repeat(2, 50%);
+    grid-gap: 10px 0px;
+    margin-bottom: 25px;
+}
+
+.formik-container .formik-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+} 
+
+.formik-container #input-suggest {
+    height: 25px;
+    width: 50%;
+    max-width: 250px;
+    font-size: 1rem;
+    border-style: none;
+    border-radius: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    outline: none;
+}
+
+.formik-container #input-excerpt {
+    height: 100px;
+    width: 80%;
+    max-width: 400px;
+    font-size: 1rem;
+    border-style: none;
+    border-radius: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    outline: none;
+}
+
+.formik-container textarea {
+    font-family: sans-serif, Helvetica, Arial;
+}
+
+.formik-container label {
+    font-size: 1.25rem;
+    margin-bottom: 3px;
+}
+
+.formik-error {
+    color: var(--red);
+    margin-bottom: 3px;
+}
+
+
+/* Form Modal Footer Components */
+
+.form-modal-footer {
+    flex: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-modal-footer button {
+    width: 150px;
+    height: 45px;
+    margin: 20px;
+    border: none;
+    border-radius: 30px;
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.form-modal-footer button:hover {
+    background-color: var(--gray);
+    color: var(--black);
+}
+
+.form-modal-cancel {
+    background-color: var(--red);
+}
+
+.form-modal-add {
+    background-color: var(--green)
+}

@@ -92,16 +92,16 @@ function Admin() {
 					</div>
 					<p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
 					<div className="users-table-header-container">
-						<span className="users-table-header">Users</span>
-						<button>Sort Button</button>
+						<span className="users-table-header">Users ({users.length})</span>
+						{/* <button>Sort Button</button> */}
 					</div>
 					<table className="users-table">
 						<thead>
 							<tr>
 								<th>#</th>
-								<th className="users-table-name-header">Name</th>
-								<th className="users-table-since-header">User Since</th>
-								<th className="users-table-total-header">Total Entries</th>
+								<th className="users-table-name">Name</th>
+								<th className="users-table-since">User Since</th>
+								<th className="users-table-total">Total Entries</th>
 								<th>Role</th>
 							</tr>
 						</thead>

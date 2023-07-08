@@ -21,19 +21,6 @@
 }
 
 
-/* Error Message Components */
-
-.error-message {
-    font-size: 1.25rem;
-    color: var(--red);
-}
-
-.offscreen {
-    position: absolute;
-    left: -9999px;
-}
-
-
 /* Users Table Header Components */
 
 .users-table-header-container {
@@ -68,19 +55,19 @@
 }
 
 .users-table th,
-td {
+.users-table td {
     padding: 15px 15px 0px 15px;
 }
 
-.users-table-name-header {
+.users-table-name {
     width: 40%;
 }
 
-.users-table-since-header {
+.users-table-since {
     width: 25%;
 }
 
-.users-table-total-header {
+.users-table-total {
     width: 25%;
 }
 
@@ -89,9 +76,9 @@ td {
     width: 30px;
     height: 30px;
     color: var(--gray);
+    cursor: pointer;
 }
 
 .icon-role:hover {
-    cursor: pointer;
     color: var(--white);
 }
