@@ -4,23 +4,32 @@ import FormModal from '../../components/FormModal/FormModal';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { sortItemsByCat } from '../../util/Utils';
+import useClickOutside from '../../hooks/useClickOutside';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { faCirclePlus, faCircleMinus, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Mod() {
     const effectRan = useRef(false);
-    const [addModal, setAddModal] = useState(false);
-    const [removeModal, setRemoveModal] = useState(false);
-    const [subs, setSubs] = useState([]);
-    const [added, setAdded] = useState(false);
-    const [removed, setRemoved] = useState(false);
     const [errMsg, setErrMsg] = useState("");
-    const [selectedId, setSelectedId] = useState(-1);
-    const [formData, setFormData] = useState({});
+    const [subs, setSubs] = useState([]);
+
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [addModal, setAddModal] = useState(false);
+    const [removeModal, setRemoveModal] = useState(false);
+    const [added, setAdded] = useState(false);
+    const [removed, setRemoved] = useState(false);
+    const [selectedId, setSelectedId] = useState(-1);
+    const [formData, setFormData] = useState({});
+
+    const categories = ["id", "song", "artist", "player", "user", "createdAt"];
+    const [sortDropdown, setSortDropdown] = useState(false);
+    const sortElement = document.getElementById("dropdown-options");
+    let domNode = useClickOutside(() => { setSortDropdown(false); });
 
     useEffect(() => {
         let isMounted = true;
@@ -50,6 +59,31 @@ function Mod() {
             effectRan.current = true;
         }
     }, []);
+
+    let sortHandler = (event) => {
+        const option = event.target;
+        if (option.matches("#dropdown-options li")) {
+            const index = Array.prototype.indexOf.call(option.parentElement.children, option);
+            const currentIsAscending = option.classList.contains("li-sort-asc");
+
+            const sorted = sortItemsByCat(subs, categories, index, !currentIsAscending);
+            setSubs(sorted);
+
+            // Updating dropdown option items
+            option.closest("#dropdown-options")
+                .querySelectorAll("li")
+                .forEach(li => li.classList.remove("li-sort-asc", "li-sort-desc"));
+            option.classList.toggle("li-sort-asc", !currentIsAscending);
+            option.classList.toggle("li-sort-desc", currentIsAscending);
+        }
+
+        sortElement.removeEventListener("click", sortHandler);
+    }
+
+    const openSortDropdown = () => {
+        sortElement.addEventListener("click", sortHandler);
+        setSortDropdown(!sortDropdown);
+    }
 
     const openAddModal = (value) => {
         setAddModal(true);
@@ -89,7 +123,7 @@ function Mod() {
             });
 
             // Remove submission from database
-            await axiosPrivate.delete('/submissions', { data: { id: data.subId }},
+            await axiosPrivate.delete('/submissions', { data: { id: data.subId } },
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -116,7 +150,7 @@ function Mod() {
 
     const handleRemoveClick = async (id) => {
         try {
-            await axiosPrivate.delete('/submissions', { data: {id: id } },
+            await axiosPrivate.delete('/submissions', { data: { id: id } },
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -162,7 +196,21 @@ function Mod() {
                             <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                             <div className="subs-table-header-container">
                                 <span className="subs-table-header">Submissions ({subs.length})</span>
-                                {/* <button>Sort Button</button> */}
+                                <div ref={domNode} className="dropdown">
+                                    <button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
+                                    <ul
+                                        className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
+                                        onClick={() => setSortDropdown(false)}
+                                        id="dropdown-options"
+                                    >
+                                        <li className="li-sort-asc">Default</li>
+                                        <li>Song</li>
+                                        <li>Artist</li>
+                                        <li>Player</li>
+                                        <li>User</li>
+                                        <li>Sent On</li>
+                                    </ul>
+                                </div>
                             </div>
                             <table className="subs-table">
                                 <thead>
@@ -199,7 +247,7 @@ function Mod() {
                                                             <FontAwesomeIcon icon={faCircleXmark} className="icon-none" />
                                                         </td>
                                                     )}
-                                                <td>{value.User.username}</td>
+                                                <td>{value.user}</td>
                                                 <td>{value.createdAt.split('T')[0]}</td>
                                                 <td className="subs-action">
                                                     <div onClick={() => openAddModal(value)}>

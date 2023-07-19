@@ -1,4 +1,4 @@
-const { Submissions, Users } = require('../models');
+const { Submissions, Users, Sequelize } = require('../models');
 
 // @desc Gets all submissions in the database
 // @route GET /submissions
@@ -11,13 +11,13 @@ const getAllSubs = async (req, res) => {
             'artist',
             'player',
             'link',
-            'createdAt'
+            'createdAt',
+            [Sequelize.col('User.id'), 'userId'],
+            [Sequelize.col('User.username'), 'user']
+
         ],
         include: [
-            {
-                model: Users,
-                attributes: ['id', 'username']
-            }
+            { model: Users, attributes: [] }
         ]
     });
     return res.json(listOfSubs);

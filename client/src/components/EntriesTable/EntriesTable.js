@@ -2,15 +2,14 @@ import './EntriesTable.css';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
-import { sortEntriesByCat } from '../../util/Utils';
+import { sortItemsByCat } from '../../util/Utils';
 import useClickOutside from '../../hooks/useClickOutside';
 
 function EntriesTable({ header, entries }) {
 	let listOfEntries = entries;
+	const categories = ["id", "song", "artist", "album", "year", "playerCode"];
 	const [sortDropdown, setSortDropdown] = useState(false);
-
-	const openSortDropdown = () => { setSortDropdown(!sortDropdown) };
-
+	const sortElement = document.getElementById("dropdown-options");
 	let domNode = useClickOutside(() => { setSortDropdown(false); });
 
 	let sortHandler = (event) => {
@@ -19,7 +18,7 @@ function EntriesTable({ header, entries }) {
 			const index = Array.prototype.indexOf.call(option.parentElement.children, option);
 			const currentIsAscending = option.classList.contains("li-sort-asc");
 
-			sortEntriesByCat(listOfEntries, index, !currentIsAscending);
+			listOfEntries = sortItemsByCat(listOfEntries, categories, index, !currentIsAscending);
 
 			// Updating dropdown option items
 			option.closest("#dropdown-options")
@@ -28,14 +27,14 @@ function EntriesTable({ header, entries }) {
 			option.classList.toggle("li-sort-asc", !currentIsAscending);
 			option.classList.toggle("li-sort-desc", currentIsAscending);
 		}
+
+		sortElement.removeEventListener("click", sortHandler);
 	}
 
-	const sortEntries = () => {
-		const element = document.getElementById("dropdown-options");
-		element.addEventListener("click", sortHandler, { once: true });
-
-		setSortDropdown(false);
-	};
+	const openSortDropdown = () => {
+		sortElement.addEventListener("click", sortHandler);
+		setSortDropdown(!sortDropdown);
+	}
 
 	const goToPlayerPage = (code) => {
 		window.open(`https://www.basketball-reference.com/players/${code.charAt(0)}/${code}.html`)
@@ -49,7 +48,7 @@ function EntriesTable({ header, entries }) {
 					<button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
 					<ul
 						className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
-						onClick={sortEntries}
+						onClick={() => setSortDropdown(false)}
 						id="dropdown-options"
 					>
 						<li className="li-sort-asc">Default</li>
@@ -87,10 +86,10 @@ function EntriesTable({ header, entries }) {
 								</td>
 								<td className="entry-player" 
 									onClick={
-										() => goToPlayerPage(value.Player.playerCode)
+										() => goToPlayerPage(value.playerCode)
 									}
 								>
-									{value.Player.name}
+									{value.playerName}
 								</td>
 								<td className="entry-excerpt">"{value.excerpt}"</td>
 								<td className="entry-link">

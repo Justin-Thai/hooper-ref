@@ -6,7 +6,22 @@ const Op = Sequelize.Op;
 //  @route GET /entries
 //
 const getAllEntries = async (req, res) => {
-    const listOfEntries = await Entries.findAll({ include: [{model: Players, attributes: ['name', 'playerCode']}] });
+    const listOfEntries = await Entries.findAll({
+        attributes: [
+            'id',
+            'song',
+            'artist',
+            'album',
+            'year',
+            'excerpt',
+            'link',
+            [Sequelize.col('Player.name'), 'playerName'],
+            [Sequelize.col('Player.playerCode'), 'playerCode'],
+        ],
+        include: [
+            { model: Players, attributes: [] }
+        ]
+    });
     return res.json(listOfEntries);
 }
 
