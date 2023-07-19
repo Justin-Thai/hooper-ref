@@ -1,4 +1,4 @@
-const { Entries, Sequelize } = require('../models');
+const { Entries, Players, Sequelize } = require('../models');
 const Op = Sequelize.Op;
 
 
@@ -6,7 +6,22 @@ const Op = Sequelize.Op;
 //  @route GET /entries
 //
 const getAllEntries = async (req, res) => {
-    const listOfEntries = await Entries.findAll();
+    const listOfEntries = await Entries.findAll({
+        attributes: [
+            'id',
+            'song',
+            'artist',
+            'album',
+            'year',
+            'excerpt',
+            'link',
+            [Sequelize.col('Player.name'), 'playerName'],
+            [Sequelize.col('Player.playerCode'), 'playerCode'],
+        ],
+        include: [
+            { model: Players, attributes: [] }
+        ]
+    });
     return res.json(listOfEntries);
 }
 
@@ -19,6 +34,7 @@ const createEntry = async (req, res) => {
     return res.status(201).json(entry);
 }
 
+/***** UPDATE *****/
 //  @desc Updates a song entry
 //  @route PUT /entries
 //
@@ -37,7 +53,7 @@ const updateEntry = async (req, res) => {
     if (req.body?.artist) entry.artist = req.body.artist;
     if (req.body?.album) entry.album = req.body.album;
     if (req.body?.year) entry.year = req.body.year;
-    if (req.body?.player) entry.player = req.body.player;
+    if (req.body?.player) entry.PlayerId = req.body.playerId; // CHANGE
     if (req.body?.excerpt) entry.excerpt = req.body.excerpt;
     if (req.body?.link) entry.link = req.body.link;
 
@@ -68,13 +84,19 @@ const deleteEntry = async (req, res) => {
 //
 const getSearchItems = async (req, res) => {
     const listOfItems = await Entries.findAll({
-        attributes: ['song', 'artist', 'player']
+        attributes: ['song', 'artist'],
+        include: [
+            {
+                model: Players,
+                attributes: ['name']
+            }
+        ]
     });
 
     const resList = new Set()
     listOfItems.map((value, key) => {
         resList.add(value.song);
-        resList.add(value.player);
+        resList.add(value.Player.name);
         const artists = value.artist.split(", ");
         artists.forEach(a => resList.add(a));
     });
@@ -104,13 +126,19 @@ const getSearchResults = async (req, res) => {
                     }
                 ),
                 Sequelize.where(
-                    Sequelize.fn('lower', Sequelize.col('player')),
+                    Sequelize.fn('lower', Sequelize.col('Player.name')),
                     {
                         [Op.like]: '%' + query + '%'
                     }
                 )
             ]
-        }
+        },
+        include: [
+            {
+                model: Players,
+                attributes: ['name', 'playerCode']
+            }
+        ]
     });
 
     return res.json(listOfEntries);
@@ -122,7 +150,7 @@ const getSearchResults = async (req, res) => {
 const getPlayerCount = async (req, res) => {
     const numPlayers = await Entries.findAll({
         attributes: [
-            [Sequelize.literal('COUNT(DISTINCT(player))'), 'playerCounter']
+            [Sequelize.literal('COUNT(DISTINCT(PlayerId))'), 'playerCounter']
         ]
     });
     return res.json(numPlayers);

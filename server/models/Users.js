@@ -22,11 +22,21 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
-    // Users.associate = (models) => {
-    //     Users.hasMany(models.Entries, {
-    //         onDelete: "cascade",
-    //     });
-    // };
+    Users.associate = (models) => {
+        Users.hasMany(models.Entries, {
+            onDelete: "cascade",
+            foreignKey: {
+                allowNull: false
+            }
+        });
+
+        Users.hasMany(models.Submissions, {
+            onDelete: "cascade",
+            foreignKey: {
+                allowNull: false
+            }
+        });
+    };
 
     return Users;
 } 

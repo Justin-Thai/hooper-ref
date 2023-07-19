@@ -17,10 +17,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER, 
             allowNull: false
         },
-        player: {
-            type: DataTypes.STRING, 
-            allowNull: false
-        },
         excerpt: {
             type: DataTypes.STRING, 
             allowNull: false
@@ -30,6 +26,16 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
     });
+
+    Entries.associate = (models) => {
+        Entries.belongsTo(models.Users, {
+            onDelete: "cascade"
+        });
+
+        Entries.belongsTo(models.Players, {
+            onDelete: "cascade"
+        });
+    };
 
     return Entries;
 } 

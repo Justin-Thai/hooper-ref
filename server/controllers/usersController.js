@@ -1,6 +1,33 @@
-const { Users } = require('../models');
+const { Users, Entries, Sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
 
+//  @desc Gets all users
+//  @route GET /users
+//
+const getAllUsers = async (req, res) => {
+    const users = await Users.findAll({
+        attributes: [
+            'id',
+            'username',
+            'createdAt',
+            'role',
+            [Sequelize.fn('COUNT', Sequelize.col('Entries.id')), 'numEntries'],
+        ],
+        include: [
+            {
+                model: Entries,
+                attributes: []
+            },
+        ],
+        group: [ 'Users.id' ]
+    });
+
+    if (!users) {
+        return res.status(204).json({ message: "No users found" });
+    }
+
+    return res.json(users);
+}
 
 //  @desc Creates a new user and hashes password
 //  @route POST /users
@@ -27,21 +54,6 @@ const createUser = async (req, res) => {
 
         return res.status(201).json("SUCCESS");
     });
-}
-
-//  @desc Gets all users
-//  @route GET /users
-//
-const getAllUsers = async (req, res) => {
-    const users = await Users.findAll({
-        attributes: {exclude: ['password', 'email', 'refreshToken', 'updatedAt']}
-    });
-    
-    if (!users) {
-        return res.status(204).json({ message: "No users found" });
-    }
-
-    return res.json(users);
 }
 
 //  @desc Updates a user's info

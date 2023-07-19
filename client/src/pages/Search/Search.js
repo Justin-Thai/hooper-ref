@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import EntriesTable from '../../components/EntriesTable/EntriesTable';
 
-
 function Search() {
     const location = useLocation();
     const [query, setQuery] = useState(() => {

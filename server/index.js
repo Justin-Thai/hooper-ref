@@ -15,15 +15,19 @@ app.use(cookieParser());
 const db = require('./models');
 
 // Routers
+const subsRouter = require('./routes/Submissions');
+app.use('/submissions', subsRouter);
 const entriesRouter = require('./routes/Entries');
 app.use('/entries', entriesRouter);
+const playersRouter = require('./routes/Players');
+app.use('/players', playersRouter);
 const usersRouter = require('./routes/Users');
 app.use('/users', usersRouter);
 const authRouter = require('./routes/Auth');
 app.use('/auth', authRouter);
 
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });

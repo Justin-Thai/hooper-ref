@@ -2,15 +2,14 @@ import './EntriesTable.css';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
-import { sortEntriesByCat } from '../../util/Utils';
+import { sortItemsByCat } from '../../util/Utils';
 import useClickOutside from '../../hooks/useClickOutside';
 
 function EntriesTable({ header, entries }) {
 	let listOfEntries = entries;
+	const categories = ["id", "song", "artist", "album", "year", "playerCode"];
 	const [sortDropdown, setSortDropdown] = useState(false);
-
-	const openSortDropdown = () => { setSortDropdown(!sortDropdown) };
-
+	const sortElement = document.getElementById("dropdown-options");
 	let domNode = useClickOutside(() => { setSortDropdown(false); });
 
 	let sortHandler = (event) => {
@@ -19,7 +18,7 @@ function EntriesTable({ header, entries }) {
 			const index = Array.prototype.indexOf.call(option.parentElement.children, option);
 			const currentIsAscending = option.classList.contains("li-sort-asc");
 
-			sortEntriesByCat(listOfEntries, index, !currentIsAscending);
+			listOfEntries = sortItemsByCat(listOfEntries, categories, index, !currentIsAscending);
 
 			// Updating dropdown option items
 			option.closest("#dropdown-options")
@@ -28,15 +27,18 @@ function EntriesTable({ header, entries }) {
 			option.classList.toggle("li-sort-asc", !currentIsAscending);
 			option.classList.toggle("li-sort-desc", currentIsAscending);
 		}
+
+		sortElement.removeEventListener("click", sortHandler);
 	}
 
-	const sortEntries = () => {
-		const element = document.getElementById("dropdown-options");
-		element.addEventListener("click", sortHandler, { once: true });
+	const openSortDropdown = () => {
+		sortElement.addEventListener("click", sortHandler);
+		setSortDropdown(!sortDropdown);
+	}
 
-		setSortDropdown(false);
-	};
-
+	const goToPlayerPage = (code) => {
+		window.open(`https://www.basketball-reference.com/players/${code.charAt(0)}/${code}.html`)
+	}
 
 	return (
 		<div>
@@ -46,7 +48,7 @@ function EntriesTable({ header, entries }) {
 					<button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
 					<ul
 						className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
-						onClick={sortEntries}
+						onClick={() => setSortDropdown(false)}
 						id="dropdown-options"
 					>
 						<li className="li-sort-asc">Default</li>
@@ -61,12 +63,12 @@ function EntriesTable({ header, entries }) {
 			<table className="entry-table">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Title</th>
-						<th>Album</th>
-						<th>Player Ref.</th>
-						<th>Excerpt</th>
-						<th>Link</th>
+						<th className="entry-table-number">#</th>
+						<th className="entry-table-title">Title</th>
+						<th className="entry-table-album">Album</th>
+						<th className="entry-table-player">Player Ref.</th>
+						<th className="entry-table-excerpt">Excerpt</th>
+						<th className="entry-table-link">Link</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -74,17 +76,23 @@ function EntriesTable({ header, entries }) {
 						return (
 							<tr key={value.id}>
 								<td></td>
-								<td className="song-column">
+								<td>
 									<div className="entry-song">{value.song}</div>
 									<div>{value.artist}</div>
 								</td>
-								<td className="album-column">
-									<div className="entry-album">{value.album}</div>
+								<td>
+									<div>{value.album}</div>
 									<div>({value.year})</div>
 								</td>
-								<td className="entry-player">{value.player}</td>
+								<td className="entry-player" 
+									onClick={
+										() => goToPlayerPage(value.playerCode)
+									}
+								>
+									{value.playerName}
+								</td>
 								<td className="entry-excerpt">"{value.excerpt}"</td>
-								<td>
+								<td className="entry-link">
 									<div onClick={() => {
 										window.open(value.link, "_blank");
 									}}>
