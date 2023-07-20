@@ -2,7 +2,28 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouseChimney, faUser, faLightbulb, faBoxArchive, faHammer, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 
-export const SidebarData = [
+const SidebarDataNoAuth = [
+    {
+        title: "Home",
+        path: "/",
+        icon: <FontAwesomeIcon icon={faHouseChimney} />,
+        cName: "navText",
+    },
+    {
+        title: "Suggest",
+        path: "/suggest",
+        icon: <FontAwesomeIcon icon={faLightbulb} />,
+        cName: "navText",
+    },
+    {
+        title: "Archive",
+        path: "/archive",
+        icon: <FontAwesomeIcon icon={faBoxArchive} />,
+        cName: "navText",
+    }
+];
+
+const SidebarDataAuth = [
     {
         title: "Home",
         path: "/",
@@ -40,3 +61,5 @@ export const SidebarData = [
         cName: "navText",
     }
 ];
+
+export {SidebarDataNoAuth, SidebarDataAuth};

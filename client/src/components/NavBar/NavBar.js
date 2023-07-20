@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { SidebarData } from './SidebarData';
-import useClickOutside  from '../../hooks/useClickOutside';
+import { SidebarDataNoAuth, SidebarDataAuth } from './SidebarData';
+import useClickOutside from '../../hooks/useClickOutside';
 import useAuth from '../../hooks/useAuth';
 import NavButtonsAuth from './NavButtonsAuth';
 import NavButtonsNoAuth from './NavButtonsNoAuth';
@@ -37,16 +37,30 @@ function NavBar() {
                             <FontAwesomeIcon icon={faXmark} />
                         </Link>
                     </li>
-                    {SidebarData.map((value, index) => {
-                        return (
-                            <li key={index} className={value.cName}>
-                                <Link to={value.path}>
-                                    {value.icon}
-                                    <span className="menuOptionTitle">{value.title}</span>
-                                </Link>
-                            </li>
-                        );
-                    })}
+                    {auth?.accessToken ? (
+                        SidebarDataAuth.map((value, index) => {
+                            return (
+                                <li key={index} className={value.cName}>
+                                    <Link to={value.path}>
+                                        {value.icon}
+                                        <span className="menuOptionTitle">{value.title}</span>
+                                    </Link>
+                                </li>
+                            );
+                        })
+                    ) : (
+                        SidebarDataNoAuth.map((value, index) => {
+                            return (
+                                <li key={index} className={value.cName}>
+                                    <Link to={value.path}>
+                                        {value.icon}
+                                        <span className="menuOptionTitle">{value.title}</span>
+                                    </Link>
+                                </li>
+                            );
+                        })
+                    )
+                    }
                 </ul>
             </nav>
         </div>

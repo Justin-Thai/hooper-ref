@@ -8,7 +8,7 @@ function Home() {
 	const [listOfItems, setListOfItems] = useState([]);
 
 	useEffect(() => {
-		axios.get("/entries/searchItems").then((response) => {
+		axios.get('/entries/searchItems').then((response) => {
 			setListOfItems(response.data);
 		});
 	}, []);

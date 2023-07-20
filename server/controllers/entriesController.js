@@ -22,6 +22,7 @@ const getAllEntries = async (req, res) => {
             { model: Players, attributes: [] }
         ]
     });
+    
     return res.json(listOfEntries);
 }
 
@@ -36,17 +37,17 @@ const createEntry = async (req, res) => {
 
 /***** UPDATE *****/
 //  @desc Updates a song entry
-//  @route PUT /entries
+//  @route PUT /entries/:id
 //
 const updateEntry = async (req, res) => {
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "Entry ID is required." });
     }
 
-    const entry = await Entries.findOne({ where: { id: req.body.id } });
+    const entry = await Entries.findOne({ where: { id: req.params.id } });
 
     if (!entry) {
-        return res.status(204).json({ message: `No entry matches ID ${req.body.id}.` });
+        return res.status(204).json({ message: `No entry matches ID ${req.params.id}.` });
     }
 
     if (req.body?.song) entry.song = req.body.song;
@@ -62,21 +63,50 @@ const updateEntry = async (req, res) => {
 }
 
 //  @desc Deletes a song entry
-//  @route DELETE /entries
+//  @route DELETE /entries/:id
 //
 const deleteEntry = async (req, res) => {
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "Entry ID is required." });
     }
 
-    const entry = await Entries.findOne({ where: { id: req.body.id } });
+    const entry = await Entries.findOne({ where: { id: req.params.id } });
 
     if (!entry) {
-        return res.status(204).json({ message: `No entry matches ID ${req.body.id}.` });
+        return res.status(204).json({ message: `No entry matches ID ${req.params.id}.` });
     }
 
     const result = await entry.destroy();
     return res.json(result);
+}
+
+//  @desc Gets all song entries submitted by the user
+//  @route GET /entries/byUser/:id
+//
+const getUserEntries = async (req, res) => {
+    if (!req?.params?.id) { 
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
+    const listOfEntries = await Entries.findAll({
+        where: { UserId: req.params.id }, 
+        attributes: [
+            'id',
+            'song',
+            'artist',
+            'album',
+            'year',
+            'excerpt',
+            'link',
+            [Sequelize.col('Player.name'), 'playerName'],
+            [Sequelize.col('Player.playerCode'), 'playerCode'],
+        ],
+        include: [
+            { model: Players, attributes: [] }
+        ]
+    });
+
+    return res.json(listOfEntries);
 }
 
 //  @desc Gets all searchable items for use in search bar 
@@ -162,6 +192,7 @@ module.exports = {
     createEntry,
     updateEntry,
     deleteEntry,
+    getUserEntries,
     getSearchItems,
     getSearchResults,
     getPlayerCount,

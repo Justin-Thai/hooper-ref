@@ -20,7 +20,7 @@ function Search() {
             setSearchResults(response.data);
         });
 
-		axios.get("/entries/searchItems").then((response) => {
+		axios.get('/entries/searchItems').then((response) => {
 			setListOfItems(response.data);
 		});
     }, []);

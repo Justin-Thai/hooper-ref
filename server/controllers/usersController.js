@@ -56,17 +56,47 @@ const createUser = async (req, res) => {
     });
 }
 
-//  @desc Updates a user's info
-//  @route PUT /users
+//  @desc Gets a user based on given id
+//  @route GET /users/:id
 //
-const updateUser = async (req, res) => {
-    if (!req?.body?.id) {
+const getUser = async (req, res) => {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "User ID is required." });
     }
 
-    const user = await Users.findOne({ where: { id: req.body.id } });
+    const user = await Users.findByPk(req.params.id, {
+        attributes: [
+            'id',
+            'username',
+            'createdAt',
+            'role'
+        ]
+    });
+
     if (!user) {
-        return res.status(204).json({ message: `No user matches ID ${req.body.id}.` });
+        return res.status(204).json({ message: "No user found" });
+    }
+
+    return res.json(user);
+}
+
+//  @desc Updates a user's info 
+//  @route PUT /users/:id
+//
+const updateUser = async (req, res) => {
+    if (!req?.params?.id) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
+    const userId = Number(req.params.id);
+
+    if (userId !== req.id) {
+        return res.status(401).json({ message: "Forbidden. You can only update your own profile."});
+    }
+
+    const user = await Users.findOne({ where: { id: userId  } });
+    if (!user) {
+        return res.status(204).json({ message: `No user matches ID ${userId }.` });
     }
 
     if (req.body?.username) {
@@ -103,10 +133,27 @@ const updateUser = async (req, res) => {
 }
 
 //  @desc Deletes a user
-//  @route DELETE /users
+//  @route DELETE /users/:id
 //
 const deleteUser = async (req, res) => {
-    return;
+    if (!req?.params?.id) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
+    const userId = Number(req.params.id);
+
+    if (userId !== req.id) {
+        return res.status(401).json({ message: "Forbidden. You can only delete your own profile."});
+    }
+
+    const user = await Users.findByPk(userId);
+
+    if (!user) {
+        return res.status(204).json({ message: `No user matches ID ${userId}.`});
+    }
+
+    const result = await user.destroy();
+    return res.json(result);
 }
 
 //  @desc Updates a user's privilege
@@ -138,6 +185,7 @@ const updateUserPrivilege = async (req, res) => {
 module.exports = {
     createUser,
     getAllUsers,
+    getUser,
     updateUser,
     deleteUser,
     updateUserPrivilege

@@ -9,6 +9,8 @@ const verifyRoles = require('../middlewares/verifyRoles');
 router.route('/')
     .get(playersController.getAllPlayers)
     .post(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), playersController.createPlayer)
+    
+router.route('/:id')
     .put(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), playersController.updatePlayer)
     .delete(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), playersController.deletePlayer);
 

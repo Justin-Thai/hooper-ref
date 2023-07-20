@@ -17,7 +17,7 @@ function FormModal({ closeModal, continueAction, parentToChild }) {
         album: "",
         year: "",
         excerpt: "",
-        userId: parentToChild.User.id
+        userId: parentToChild.userId
     }
 
     const validationSchema = Yup.object().shape({

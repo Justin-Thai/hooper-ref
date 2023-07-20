@@ -2,7 +2,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import RequireAuth from './components/RequireAuth';
-import { Home, Login, Registration, Suggest, Archive, Search, Profile, Mod, Admin, Unauthorized, Missing } from './pages';
+import { Home, Login, Registration, Suggest, Archive, Search, UserProfile, PlayerProfile, Mod, Admin, Unauthorized, Missing } from './pages';
 
 const ROLES = {
 	"User": "user",
@@ -23,10 +23,11 @@ function App() {
 					<Route exact path="/archive" element={<Archive />} />
 					<Route exact path="/search" element={<Search />} />
 					<Route exact path="/unauthorized" element={<Unauthorized />} />
+					<Route exact path="/profile" element={<UserProfile />} />
+					<Route exact path="/player" element={<PlayerProfile />} />
 
 					{/* Protected routes */}
 						<Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Mod, ROLES.Admin]} />}>
-							<Route exact path="/profile" element={<Profile />} />
 							<Route exact path="/suggest" element={<Suggest />} />
 						</Route>
 

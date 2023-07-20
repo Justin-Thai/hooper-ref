@@ -1,4 +1,4 @@
-import './Profile.css';
+import './UserProfile.css';
 import React from 'react';
 
 function Profile() {
@@ -7,4 +7,4 @@ function Profile() {
   )
 }
 
-export default Profile
+export default Profile;
