@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import useLogout from '../../hooks/useLogout';
 
-function NavButtonsAuth() {
+function NavButtonsAuth({ username }) {
     let navigate = useNavigate();
     const logout = useLogout();
 
@@ -15,7 +15,7 @@ function NavButtonsAuth() {
 
     return (
         <div className="navbarButtonContainer">
-            <span className="username" onClick={() => navigate('/profile')}>My Profile</span>
+            <span className="username" onClick={() => navigate(`/profile/${username}`)}>{username}</span>
             <button className="navButton" onClick={signOut}>Sign Out</button>
         </div>
     )

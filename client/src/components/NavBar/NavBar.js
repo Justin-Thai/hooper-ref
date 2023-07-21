@@ -6,11 +6,15 @@ import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { SidebarDataNoAuth, SidebarDataAuth } from './SidebarData';
 import useClickOutside from '../../hooks/useClickOutside';
 import useAuth from '../../hooks/useAuth';
+import jwt_decode from 'jwt-decode';
 import NavButtonsAuth from './NavButtonsAuth';
 import NavButtonsNoAuth from './NavButtonsNoAuth';
 
 function NavBar() {
     const { auth } = useAuth();
+    const decodedUsername = auth?.accessToken
+        ? jwt_decode(auth.accessToken).UserInfo?.username
+        : undefined;
     const [sidebar, setSidebar] = useState(false);
 
     const openSidebar = () => { setSidebar(!sidebar); }
@@ -28,7 +32,7 @@ function NavBar() {
                     <FontAwesomeIcon icon={faBars} onClick={openSidebar} />
                 </Link>
                 <span className="pageTitle" onClick={() => navigate(`/`)}>HooperRef</span>
-                {auth?.accessToken ? <NavButtonsAuth /> : <NavButtonsNoAuth />}
+                {auth?.accessToken ? <NavButtonsAuth username={decodedUsername} /> : <NavButtonsNoAuth />}
             </div>
             <nav className={sidebar ? "navMenuActive" : "navMenu"}>
                 <ul className="navMenuItems" onClick={openSidebar}>
@@ -41,10 +45,18 @@ function NavBar() {
                         SidebarDataAuth.map((value, index) => {
                             return (
                                 <li key={index} className={value.cName}>
-                                    <Link to={value.path}>
-                                        {value.icon}
-                                        <span className="menuOptionTitle">{value.title}</span>
-                                    </Link>
+                                    {value.path === '/profile' ? (
+                                        <Link to={`/profile/${decodedUsername}`}>
+                                            {value.icon}
+                                            <span className="menuOptionTitle">{value.title}</span>
+                                        </Link>
+                                    ) : (
+                                        <Link to={value.path}>
+                                            {value.icon}
+                                            <span className="menuOptionTitle">{value.title}</span>
+                                        </Link>
+                                    )
+                                    }
                                 </li>
                             );
                         })

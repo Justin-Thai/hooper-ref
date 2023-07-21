@@ -56,15 +56,16 @@ const createUser = async (req, res) => {
     });
 }
 
-//  @desc Gets a user based on given id
-//  @route GET /users/:id
+//  @desc Gets a user based on given username
+//  @route GET /users/:username
 //
 const getUser = async (req, res) => {
-    if (!req?.params?.id) {
-        return res.status(400).json({ message: "User ID is required." });
+    if (!req?.params?.username) {
+        return res.status(400).json({ message: "Username is required." });
     }
 
-    const user = await Users.findByPk(req.params.id, {
+    const user = await Users.findOne({
+        where: { username: req.params.username },
         attributes: [
             'id',
             'username',

@@ -28,7 +28,7 @@ function Login() {
             ).then((response) => {
                 const accessToken = response?.data?.accessToken;
 
-                setAuth({ username, accessToken });
+                setAuth({ accessToken });
                 resetUser();
                 setPassword('');
                 setErrMsg('');

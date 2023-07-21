@@ -23,21 +23,22 @@ function App() {
 					<Route exact path="/archive" element={<Archive />} />
 					<Route exact path="/search" element={<Search />} />
 					<Route exact path="/unauthorized" element={<Unauthorized />} />
-					<Route exact path="/profile" element={<UserProfile />} />
+					<Route exact path="/profile/:username" element={<UserProfile />} />
 					<Route exact path="/player" element={<PlayerProfile />} />
 
 					{/* Protected routes */}
-						<Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Mod, ROLES.Admin]} />}>
-							<Route exact path="/suggest" element={<Suggest />} />
-						</Route>
+					<Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Mod, ROLES.Admin]} />}>
+						<Route exact path="/suggest" element={<Suggest />} />
+					</Route>
 
-						<Route element={<RequireAuth allowedRoles={[ROLES.Mod, ROLES.Admin]} />}>
-							<Route exact path="/mod" element={<Mod />} />
-						</Route>
+					<Route element={<RequireAuth allowedRoles={[ROLES.Mod, ROLES.Admin]} />}>
+						<Route exact path="/mod" element={<Mod />} />
+					</Route>
 
-						<Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-							<Route exact path="/admin" element={<Admin />} />
-						</Route>
+					<Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+						<Route exact path="/admin" element={<Admin />} />
+					</Route>
+
 
 					{/* Missing page route */}
 					<Route path="*" element={<Missing />} />

@@ -10,8 +10,9 @@ router.route('/')
     .get(verifyJWT, verifyRoles(ROLES_LIST.Admin), usersController.getAllUsers)
     .post(usersController.createUser)
 
+router.route('/:username').get(usersController.getUser);
+
 router.route('/:id')
-    .get(usersController.getUser)
     .put(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod, ROLES_LIST.User), usersController.updateUser)
     .delete(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod, ROLES_LIST.User), usersController.deleteUser);
 
