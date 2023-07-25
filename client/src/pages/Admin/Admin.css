@@ -71,7 +71,7 @@
     width: 25%;
 }
 
-.icon-role {
+.admin-page .icon-role {
     margin-left: 5px;
     width: 30px;
     height: 30px;
@@ -79,6 +79,6 @@
     cursor: pointer;
 }
 
-.icon-role:hover {
+.admin-page .icon-role:hover {
     color: var(--white);
 }
