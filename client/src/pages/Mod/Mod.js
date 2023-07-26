@@ -40,7 +40,6 @@ function Mod() {
                 const response = await axiosPrivate.get('/submissions', {
                     signal: controller.signal
                 });
-                console.log(response.data);
                 isMounted && setSubs(response.data);
             }
             catch (err) {

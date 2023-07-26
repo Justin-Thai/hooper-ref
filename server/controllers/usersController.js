@@ -19,7 +19,7 @@ const getAllUsers = async (req, res) => {
                 attributes: []
             },
         ],
-        group: [ 'Users.id' ]
+        group: ['Users.id']
     });
 
     if (!users) {
@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
 
     const userCheck = await Users.findOne({ where: { username: username } });
     const emailCheck = await Users.findOne({ where: { email: email } });
-    
+
     if (userCheck) {
         return res.status(409).json({ message: "Username already taken." });
     }
@@ -69,6 +69,7 @@ const getUser = async (req, res) => {
         attributes: [
             'id',
             'username',
+            'email',
             'createdAt',
             'role'
         ]
@@ -92,15 +93,20 @@ const updateUser = async (req, res) => {
     const userId = Number(req.params.id);
 
     if (userId !== req.id) {
-        return res.status(401).json({ message: "Forbidden. You can only update your own profile."});
+        return res.status(401).json({ message: "Forbidden. You can only update your own profile." });
     }
 
-    const user = await Users.findOne({ where: { id: userId  } });
+    const user = await Users.findOne({ where: { id: userId } });
     if (!user) {
-        return res.status(204).json({ message: `No user matches ID ${userId }.` });
+        return res.status(204).json({ message: `No user matches ID ${userId}.` });
     }
 
-    if (req.body?.username) {
+    const match = await bcrypt.compare(req.body?.oldPass, user.password);
+    if (!match) {
+        return res.status(401).json({ message: "Current password is incorrect." })
+    }
+
+    if (req.body?.username !== user.username) {
         const userCheck = await Users.findOne({ where: { username: req.body.username } });
         if (userCheck) {
             return res.status(409).json({ message: "Username already taken." });
@@ -109,7 +115,7 @@ const updateUser = async (req, res) => {
         user.username = req.body.username;
     }
 
-    if (req.body?.email) {
+    if (req.body?.email !== user.email) {
         const emailCheck = await Users.findOne({ where: { email: req.body?.email } });
         if (emailCheck) {
             return res.status(409).json({ message: "Email is already being used." });
@@ -118,10 +124,9 @@ const updateUser = async (req, res) => {
         user.email = req.body.email;
     }
 
-    if (req.body?.password && req.body?.oldPass) {
-        const oldPassMatch = await bcrypt.compare(req.body.oldPass, user.password);   
-        if (!oldPassMatch) {
-            return res.status(401).json({ message: "Old password does not match." });
+    if (req.body?.password) {
+        if (req.body.password !== req.body.confirmPass) {
+            return res.status(400).json({ message: "New password fields don't match." });
         }
 
         await bcrypt.hash(req.body.password, 10).then((hash) => {
@@ -144,13 +149,13 @@ const deleteUser = async (req, res) => {
     const userId = Number(req.params.id);
 
     if (userId !== req.id) {
-        return res.status(401).json({ message: "Forbidden. You can only delete your own profile."});
+        return res.status(401).json({ message: "Forbidden. You can only delete your own profile." });
     }
 
     const user = await Users.findByPk(userId);
 
     if (!user) {
-        return res.status(204).json({ message: `No user matches ID ${userId}.`});
+        return res.status(204).json({ message: `No user matches ID ${userId}.` });
     }
 
     const result = await user.destroy();
@@ -164,14 +169,14 @@ const updateUserPrivilege = async (req, res) => {
     if (!req?.params?.id) {
         return res.status(400).json({ message: "User ID is required." });
     }
-    
+
     const user = await Users.findOne({ where: { id: req.params.id } });
     if (!user) {
         return res.status(204).json({ message: `No user matches ID ${req.params.id}.` });
     }
 
     const userRole = user.role;
-    
+
     if (userRole === "mod") {
         user.role = "user";
     }
