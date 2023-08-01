@@ -1,5 +1,7 @@
 const { Users, Entries, Sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
+// const cloudinary = require('../utils/cloudinary');
+
 
 //  @desc Gets all users
 //  @route GET /users
@@ -23,7 +25,7 @@ const getAllUsers = async (req, res) => {
     });
 
     if (!users) {
-        return res.status(204).json({ message: "No users found" });
+        return res.status(204).json({ message: "No users found." });
     }
 
     return res.json(users);
@@ -133,6 +135,10 @@ const updateUser = async (req, res) => {
             user.password = hash;
         });
     }
+
+    // if (req.body?.image) {
+    //     if (req.body.image)
+    // }
 
     const result = await user.save();
     return res.json(result);

@@ -26,9 +26,9 @@
 .image-placeholder {
     height: 200px;
     width: 200px;
-    background: var(--blue);
     border-radius: 50%;
     display: flex;
+    object-fit: cover;
 }
 
 

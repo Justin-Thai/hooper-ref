@@ -8,12 +8,14 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
     const axiosPrivate = useAxiosPrivate();
     const formRef = useRef();
     const [errMsg, setErrMsg] = useState("");
+    const [profileImage, setProfileImage] = useState("");
 
     const MAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const USER_REGEX = /^(?=[A-z0-9-_]).{3,30}$/;
     const userReqString = "Username must be between 3 to 30 characters long. Alphanumeric characters, underscores, and hyphens allowed.";
     const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,}$/;
     const passReqString = "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character (!@#$%).";
+    const acceptedFileTypes = ["image/jpeg", "image/png"];
 
     const initialValues = {
         id: parentToChild.id,
@@ -44,6 +46,27 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
         ,
     });
 
+    const handleImage = (event) => {
+        const file = event.target.files[0];
+
+        if (!acceptedFileTypes.includes(file?.type)) {
+            event.target.value = null;
+            setErrMsg('Only JPEG and PNG files allowed.');
+            return;
+        }
+
+        // Convert file to base64 encoded image
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setProfileImage(reader.result);
+            setErrMsg('');
+        }
+        reader.onerror = () => {
+            setErrMsg('Image is not properly uploaded.');
+        }
+    }
+
     const handleSubmit = () => {
         if (formRef.current) {
             formRef.current.handleSubmit();
@@ -56,7 +79,8 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
             email: data.email,
             oldPass: data.oldPass,
             password: data.password,
-            confirmPass: data.confirmPass
+            confirmPass: data.confirmNewPass,
+            image: profileImage
         }
         console.log(userData);
 
@@ -150,6 +174,10 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
                             </div>
                         </Form>
                     </Formik>
+                    <div className="profile-form-picture">
+                        <label for="profile-pic">Profile Picture</label>
+                        <input type="file" id="profile-pic" name="profile-pic" accept=".png, .jpg, .jpeg" onChange={handleImage} />
+                    </div>
                 </div>
                 <div className="profile-modal-footer">
                     <button className="profile-modal-cancel" onClick={() => closeModal(false)}>Cancel</button>

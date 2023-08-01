@@ -71,7 +71,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .profile-form-container #input-edit {
@@ -96,6 +96,37 @@
     margin-bottom: 3px;
 }
 
+.profile-form-picture {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+    margin-top: 10px;
+}
+
+.profile-form-picture label {
+    width: 40%;
+}
+
+.profile-form-picture input {
+    width: 60%;
+    font-size: 1rem;
+}
+
+.profile-form-picture input::file-selector-button {
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 5px 10px 5px 10px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.profile-form-picture input::file-selector-button:hover {
+    color: var(--black);
+    background-color: var(--gray);
+}
 
 /* Form Modal Footer Components */
 
@@ -113,7 +144,7 @@
     border: none;
     border-radius: 30px;
     color: var(--white);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     cursor: pointer;
 }
 

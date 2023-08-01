@@ -9,6 +9,7 @@ import ProfileModal from '../../components/ProfileModal/ProfileModal';
 import EntriesTable from '../../components/EntriesTable/EntriesTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHammer, faScrewdriverWrench, faBasketball, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import default_profile_image from '../../assets/default_profile.png';
 
 function Profile() {
 	const logout = useLogout();
@@ -19,6 +20,7 @@ function Profile() {
 
 	let { username } = useParams();
 	const [user, setUser] = useState({});
+	const [userImage, setUserImage] = useState("");
 	const [listOfEntries, setListOfEntries] = useState([]);
 
 	const navigate = useNavigate();
@@ -34,6 +36,7 @@ function Profile() {
 			}
 			response.data.createdAt = response.data.createdAt.split('T')[0];
 			setUser(response.data);
+			//setUserImage(response.data.image);
 
 			axios.get(`/entries/byUser/${response.data.id}`).then((response) => {
 				setListOfEntries(response.data);
@@ -62,7 +65,7 @@ function Profile() {
 				<>
 					<div className="user-profile-container">
 						<div className="user-profile-picture">
-							<span className="image-placeholder"></span>
+							<img className="image-placeholder" src={userImage} onError={(error) => {error.target.src = default_profile_image;}}/>
 						</div>
 						<div className="user-profile-info">
 							<div className="user-profile-name">
