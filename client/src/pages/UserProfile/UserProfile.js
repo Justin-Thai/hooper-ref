@@ -36,13 +36,13 @@ function Profile() {
 			}
 			response.data.createdAt = response.data.createdAt.split('T')[0];
 			setUser(response.data);
-			//setUserImage(response.data.image);
+			setUserImage(response.data.image_url);
 
 			axios.get(`/entries/byUser/${response.data.id}`).then((response) => {
 				setListOfEntries(response.data);
 			});
 		});
-	}, []);
+	}, [username]);
 
 	const openEditModal = () => {
 		setOpenModal(true);
@@ -65,7 +65,11 @@ function Profile() {
 				<>
 					<div className="user-profile-container">
 						<div className="user-profile-picture">
-							<img className="image-placeholder" src={userImage} onError={(error) => {error.target.src = default_profile_image;}}/>
+							{userImage ? (
+								<img className="image-placeholder" src={userImage} alt="User profile"/>
+							) : (
+								<img className="image-placeholder" src={default_profile_image} alt="Default profile"/>
+							)}
 						</div>
 						<div className="user-profile-info">
 							<div className="user-profile-name">

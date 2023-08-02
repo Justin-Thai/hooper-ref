@@ -1,7 +1,11 @@
 const { Users, Entries, Sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
-// const cloudinary = require('../utils/cloudinary');
+const cloudinary = require('../utils/cloudinary');
 
+const imageSignatures = {
+    png: "iVBORw0KGgo",
+    jpg: "/9j/"
+};
 
 //  @desc Gets all users
 //  @route GET /users
@@ -73,7 +77,8 @@ const getUser = async (req, res) => {
             'username',
             'email',
             'createdAt',
-            'role'
+            'role',
+            'image_url'
         ]
     });
 
@@ -108,22 +113,26 @@ const updateUser = async (req, res) => {
         return res.status(401).json({ message: "Current password is incorrect." })
     }
 
-    if (req.body?.username !== user.username) {
-        const userCheck = await Users.findOne({ where: { username: req.body.username } });
-        if (userCheck) {
-            return res.status(409).json({ message: "Username already taken." });
-        }
+    if (req.body?.username) {
+        if (req.body.username !== user.username) {
+            const userCheck = await Users.findOne({ where: { username: req.body.username } });
+            if (userCheck) {
+                return res.status(409).json({ message: "Username already taken." });
+            }
 
-        user.username = req.body.username;
+            user.username = req.body.username;
+        }
     }
 
-    if (req.body?.email !== user.email) {
-        const emailCheck = await Users.findOne({ where: { email: req.body?.email } });
-        if (emailCheck) {
-            return res.status(409).json({ message: "Email is already being used." });
+    if (req.body?.email) {
+        if (req.body.email !== user.email) {
+            const emailCheck = await Users.findOne({ where: { email: req.body?.email } });
+            if (emailCheck) {
+                return res.status(409).json({ message: "Email is already being used." });
+            }
+    
+            user.email = req.body.email;
         }
-
-        user.email = req.body.email;
     }
 
     if (req.body?.password) {
@@ -136,9 +145,22 @@ const updateUser = async (req, res) => {
         });
     }
 
-    // if (req.body?.image) {
-    //     if (req.body.image)
-    // }
+    if (req.body?.image) {
+        const b64String = req.body.image.split(',')[1];
+        if (!b64String.startsWith(imageSignatures.png) && !b64String.startsWith(imageSignatures.jpg)) {
+            return res.status(415).json({ message: "Submitted file is not a JPEG or PNG file." });
+        }
+
+        if (user.image_public_id && user.image_url) {
+            await cloudinary.uploader.destroy(user.image_public_id);
+        }
+
+        const result = await cloudinary.uploader.upload(req.body.image, {
+            folder: "hooperref-profile-pictures"
+        });
+        user.image_public_id = result.public_id;
+        user.image_url = result.url;
+    }
 
     const result = await user.save();
     return res.json(result);
