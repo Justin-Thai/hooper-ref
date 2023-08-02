@@ -5,6 +5,8 @@
     height: 100%;
     background-color: var(--black);
     position: fixed;
+    top: 30px;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,8 +15,9 @@
 .modal-container {
     width: 400px;
     height: 250px;
+    border: 2px solid var(--gray);
     border-radius: 30px;
-    background-color: var(--gray);
+    background-color: var(--black);
     display: flex;
     flex-direction: column;
     padding: 15px;
@@ -26,6 +29,7 @@
 }
 
 .modal-exit button {
+    color: var(--gray);
     background-color: transparent;
     border: none;
     font-size: 1.75rem;
@@ -39,7 +43,7 @@
 .modal-text {
     display: inline-block;
     font-size: 1.75rem;
-    color: var(--black);
+    color: var(--white);
     text-align: center;
     margin-top: 25px; 
 }
@@ -57,13 +61,14 @@
     margin: 20px;
     border: none;
     border-radius: 30px;
-    color: var(--black);
+    color: var(--white);
     font-size: 1.5rem;
     cursor: pointer;
 }
 
 .modal-footer button:hover {
-    background-color: var(--white);
+    background-color: var(--gray);
+    color: var(--black);
 }
 
 .modal-continue {

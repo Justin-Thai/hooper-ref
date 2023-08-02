@@ -17,7 +17,7 @@ function FormModal({ closeModal, continueAction, parentToChild }) {
         album: "",
         year: "",
         excerpt: "",
-        userId: parentToChild.User.id
+        userId: parentToChild.userId
     }
 
     const validationSchema = Yup.object().shape({
@@ -165,7 +165,7 @@ function FormModal({ closeModal, continueAction, parentToChild }) {
                 </div>
                 <div className="form-modal-footer">
                     <button className="form-modal-cancel" onClick={() => closeModal(false)}>Cancel</button>
-                    <button className="form-modal-add" type="submit" onClick={handleSumbit}>Add Entry</button>
+                    <button className="form-modal-confirm" type="submit" onClick={handleSumbit}>Add Entry</button>
                 </div>
             </div>
         </div>

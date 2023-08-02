@@ -44,7 +44,7 @@ function Registration() {
 
     const onSumbit = async (data) => {
         try {
-            await axios.post("/users", data).then((response) => {
+            await axios.post('/users', data).then((response) => {
                 setSuccess(true);
             });
         }

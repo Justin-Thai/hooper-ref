@@ -8,11 +8,11 @@ function Archive() {
     const [numPlayers, setNumPlayers] = useState(0);
 
     useEffect(() => {
-        axios.get("/entries").then((response) => {
+        axios.get('/entries').then((response) => {
             setListOfEntries(response.data);
         });
 
-        axios.get("/entries/playerCount").then((response) => {
+        axios.get('/entries/playerCount').then((response) => {
             setNumPlayers(response.data[0].playerCounter);
         });
     }, []);

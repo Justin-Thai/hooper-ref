@@ -1,5 +1,11 @@
 const { Users, Entries, Sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
+const cloudinary = require('../utils/cloudinary');
+
+const imageSignatures = {
+    png: "iVBORw0KGgo",
+    jpg: "/9j/"
+};
 
 //  @desc Gets all users
 //  @route GET /users
@@ -19,11 +25,11 @@ const getAllUsers = async (req, res) => {
                 attributes: []
             },
         ],
-        group: [ 'Users.id' ]
+        group: ['Users.id']
     });
 
     if (!users) {
-        return res.status(204).json({ message: "No users found" });
+        return res.status(204).json({ message: "No users found." });
     }
 
     return res.json(users);
@@ -37,7 +43,7 @@ const createUser = async (req, res) => {
 
     const userCheck = await Users.findOne({ where: { username: username } });
     const emailCheck = await Users.findOne({ where: { email: email } });
-    
+
     if (userCheck) {
         return res.status(409).json({ message: "Username already taken." });
     }
@@ -56,41 +62,82 @@ const createUser = async (req, res) => {
     });
 }
 
-//  @desc Updates a user's info
-//  @route PUT /users
+//  @desc Gets a user based on given username
+//  @route GET /users/:username
+//
+const getUser = async (req, res) => {
+    if (!req?.params?.username) {
+        return res.status(400).json({ message: "Username is required." });
+    }
+
+    const user = await Users.findOne({
+        where: { username: req.params.username },
+        attributes: [
+            'id',
+            'username',
+            'email',
+            'createdAt',
+            'role',
+            'image_url'
+        ]
+    });
+
+    if (!user) {
+        return res.status(204).json({ message: "No user found" });
+    }
+
+    return res.json(user);
+}
+
+//  @desc Updates a user's info 
+//  @route PUT /users/:id
 //
 const updateUser = async (req, res) => {
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "User ID is required." });
     }
 
-    const user = await Users.findOne({ where: { id: req.body.id } });
+    const userId = Number(req.params.id);
+
+    if (userId !== req.id) {
+        return res.status(401).json({ message: "Forbidden. You can only update your own profile." });
+    }
+
+    const user = await Users.findOne({ where: { id: userId } });
     if (!user) {
-        return res.status(204).json({ message: `No user matches ID ${req.body.id}.` });
+        return res.status(204).json({ message: `No user matches ID ${userId}.` });
+    }
+
+    const match = await bcrypt.compare(req.body?.oldPass, user.password);
+    if (!match) {
+        return res.status(401).json({ message: "Current password is incorrect." })
     }
 
     if (req.body?.username) {
-        const userCheck = await Users.findOne({ where: { username: req.body.username } });
-        if (userCheck) {
-            return res.status(409).json({ message: "Username already taken." });
-        }
+        if (req.body.username !== user.username) {
+            const userCheck = await Users.findOne({ where: { username: req.body.username } });
+            if (userCheck) {
+                return res.status(409).json({ message: "Username already taken." });
+            }
 
-        user.username = req.body.username;
+            user.username = req.body.username;
+        }
     }
 
     if (req.body?.email) {
-        const emailCheck = await Users.findOne({ where: { email: req.body?.email } });
-        if (emailCheck) {
-            return res.status(409).json({ message: "Email is already being used." });
+        if (req.body.email !== user.email) {
+            const emailCheck = await Users.findOne({ where: { email: req.body?.email } });
+            if (emailCheck) {
+                return res.status(409).json({ message: "Email is already being used." });
+            }
+    
+            user.email = req.body.email;
         }
-
-        user.email = req.body.email;
     }
 
-    if (req.body?.password && req.body?.oldPass) {
-        const oldPassMatch = await bcrypt.compare(req.body.oldPass, user.password);   
-        if (!oldPassMatch) {
-            return res.status(401).json({ message: "Old password does not match." });
+    if (req.body?.password) {
+        if (req.body.password !== req.body.confirmPass) {
+            return res.status(400).json({ message: "New password fields don't match." });
         }
 
         await bcrypt.hash(req.body.password, 10).then((hash) => {
@@ -98,15 +145,49 @@ const updateUser = async (req, res) => {
         });
     }
 
+    if (req.body?.image) {
+        const b64String = req.body.image.split(',')[1];
+        if (!b64String.startsWith(imageSignatures.png) && !b64String.startsWith(imageSignatures.jpg)) {
+            return res.status(415).json({ message: "Submitted file is not a JPEG or PNG file." });
+        }
+
+        if (user.image_public_id && user.image_url) {
+            await cloudinary.uploader.destroy(user.image_public_id);
+        }
+
+        const result = await cloudinary.uploader.upload(req.body.image, {
+            folder: "hooperref-profile-pictures"
+        });
+        user.image_public_id = result.public_id;
+        user.image_url = result.url;
+    }
+
     const result = await user.save();
     return res.json(result);
 }
 
 //  @desc Deletes a user
-//  @route DELETE /users
+//  @route DELETE /users/:id
 //
 const deleteUser = async (req, res) => {
-    return;
+    if (!req?.params?.id) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
+    const userId = Number(req.params.id);
+
+    if (userId !== req.id) {
+        return res.status(401).json({ message: "Forbidden. You can only delete your own profile." });
+    }
+
+    const user = await Users.findByPk(userId);
+
+    if (!user) {
+        return res.status(204).json({ message: `No user matches ID ${userId}.` });
+    }
+
+    const result = await user.destroy();
+    return res.json(result);
 }
 
 //  @desc Updates a user's privilege
@@ -116,14 +197,14 @@ const updateUserPrivilege = async (req, res) => {
     if (!req?.params?.id) {
         return res.status(400).json({ message: "User ID is required." });
     }
-    
+
     const user = await Users.findOne({ where: { id: req.params.id } });
     if (!user) {
         return res.status(204).json({ message: `No user matches ID ${req.params.id}.` });
     }
 
     const userRole = user.role;
-    
+
     if (userRole === "mod") {
         user.role = "user";
     }
@@ -138,6 +219,7 @@ const updateUserPrivilege = async (req, res) => {
 module.exports = {
     createUser,
     getAllUsers,
+    getUser,
     updateUser,
     deleteUser,
     updateUserPrivilege

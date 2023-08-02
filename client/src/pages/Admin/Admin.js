@@ -163,10 +163,10 @@ function Admin() {
 										<td>
 											<div onClick={() => openConfirmation(value.id)}>
 												{value.role === "user"
-													? <FontAwesomeIcon className="icon-role" icon={faBasketball} />
+													? <FontAwesomeIcon className="icon-role" title="User" icon={faBasketball} />
 													: value.role === "mod"
-														? <FontAwesomeIcon className="icon-role" icon={faHammer} />
-														: <FontAwesomeIcon className="icon-role" icon={faScrewdriverWrench} />
+														? <FontAwesomeIcon className="icon-role" title="Mod" icon={faHammer} />
+														: <FontAwesomeIcon className="icon-role" title="Admin" icon={faScrewdriverWrench} />
 												}
 											</div>
 										</td>

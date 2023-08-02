@@ -1,0 +1,96 @@
+/* Profile Page Components */
+
+.profile-page {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 125px;
+}
+
+.user-profile-container {
+    width: 50%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-bottom: 25px;
+}
+
+
+/* User Profile Picture Components */
+
+.user-profile-picture {
+    margin: auto;
+}
+
+.image-placeholder {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    display: flex;
+    object-fit: cover;
+}
+
+
+/* User Profile Info Components */
+
+.user-profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.user-profile-name {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.user-profile-username {
+    font-size: 2.75rem;
+}
+
+.profile-page .icon-role {
+    width: 33px;
+    height: 33px;
+    color: var(--white);
+    padding-top: 9px;
+    margin-left: 25px;
+}
+
+.user-profile-date {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.user-date-header {
+    font-size: 1.25rem;
+    color: var(--white);
+}
+
+.user-date-text {
+    font-size: 1.25rem;
+    color: var(--gray);
+    margin-left: 5px;
+}
+
+
+/* User Profile Edit Components */
+
+.user-profile-edit {
+    font-size: 1.25rem;
+    color: var(--gray);
+    cursor: pointer;
+}
+
+.user-profile-edit:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+.icon-edit {
+    margin-right: 5px;
+}
+

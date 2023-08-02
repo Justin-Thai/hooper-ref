@@ -5,12 +5,14 @@
     height: 100%;
     background-color: var(--black);
     position: fixed;
+    top: 30px;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.form-modal-container {
+  }
+  
+  .form-modal-container {
     width: 75%;
     height: 75%;
     border: 2px solid var(--gray);
@@ -19,26 +21,26 @@
     display: flex;
     flex-direction: column;
     padding: 15px;
-}
-
-.form-modal-exit {
+  }
+  
+  .form-modal-exit {
     display: flex;
     justify-content: flex-start;
-}
-
-.form-modal-exit button {
+  }
+  
+  .form-modal-exit button {
     color: var(--gray);
     background-color: transparent;
     border: none;
     font-size: 1.75rem;
     cursor: pointer;
-}
-
-.form-modal-exit button:hover {
+  }
+  
+  .form-modal-exit button:hover {
     color: var(--white);
-}
+  }
 
-
+  
 /* Form Modal Body Components */
 
 .form-modal-body {
@@ -112,9 +114,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.form-modal-footer button {
+  }
+  
+  .form-modal-footer button {
     width: 150px;
     height: 45px;
     margin: 20px;
@@ -123,17 +125,17 @@
     color: var(--white);
     font-size: 1.5rem;
     cursor: pointer;
-}
-
-.form-modal-footer button:hover {
+  }
+  
+  .form-modal-footer button:hover {
     background-color: var(--gray);
     color: var(--black);
-}
-
-.form-modal-cancel {
+  }
+  
+  .form-modal-cancel {
     background-color: var(--red);
-}
-
-.form-modal-add {
+  }
+  
+  .form-modal-confirm {
     background-color: var(--green)
-}
+  }

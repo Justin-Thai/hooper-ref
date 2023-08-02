@@ -34,17 +34,17 @@ const createSub = async (req, res) => {
 }
 
 // @desc Deletes a submission
-// @route DELETE /submissions
+// @route DELETE /submissions/:id
 //
 const deleteSub = async (req, res) => {
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "Submission ID is required." });
     }
 
-    const submission = await Submissions.findOne({ where: { id: req.body.id } });
+    const submission = await Submissions.findOne({ where: { id: req.params.id } });
 
     if (!submission) {
-        return res.status(204).json({ message: `No submission matches ID ${req.body.id}.` })
+        return res.status(204).json({ message: `No submission matches ID ${req.params.id}.` })
     }
 
     const result = await submission.destroy();

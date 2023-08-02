@@ -34,16 +34,16 @@ const createPlayer = async (req, res) => {
 }
 
 // @desc Updates a current player
-// @route PUT /players
+// @route PUT /players/:id
 //
 const updatePlayer = async (req, res) => {
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "Player ID is required." });
     }
 
-    const player = await Players.findOne({ where: { id: req.body.id } });
+    const player = await Players.findOne({ where: { id: req.params.id } });
     if (!player) {
-        return res.status(204).json({ message: `No player matches ID ${req.body.id}.`});
+        return res.status(204).json({ message: `No player matches ID ${req.params.id}.`});
     }
 
     if (req.body?.name) {
@@ -59,16 +59,16 @@ const updatePlayer = async (req, res) => {
 }
 
 // @desc Deletes a player
-// @route DELETE /players
+// @route DELETE /players/:id
 //
 const deletePlayer = async (req, res) => {
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ message: "Player ID is required." });
     }
 
-    const player = await Players.findOne({ where: { id: req.body.id} });
+    const player = await Players.findOne({ where: { id: req.params.id} });
     if (!player) {
-        return res.status(204).json({ message: `No player matches ID ${req.body.id}.`});
+        return res.status(204).json({ message: `No player matches ID ${req.params.id}.`});
     }
 
     const result = await player.destroy();

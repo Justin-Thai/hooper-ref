@@ -42,7 +42,7 @@ function Suggest() {
 
     const onSubmit = async (data) => {
         try {
-            await axiosPrivate.post("/submissions", data,
+            await axiosPrivate.post('/submissions', data,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true

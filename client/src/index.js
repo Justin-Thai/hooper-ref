@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthProvider';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PersistLogin from './components/PersistLogin';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 
 if (process.env.NODE_ENV === 'production') {

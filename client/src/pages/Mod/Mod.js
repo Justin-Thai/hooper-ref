@@ -40,7 +40,6 @@ function Mod() {
                 const response = await axiosPrivate.get('/submissions', {
                     signal: controller.signal
                 });
-                console.log(response.data);
                 isMounted && setSubs(response.data);
             }
             catch (err) {
@@ -123,7 +122,7 @@ function Mod() {
             });
 
             // Remove submission from database
-            await axiosPrivate.delete('/submissions', { data: { id: data.subId } },
+            await axiosPrivate.delete(`/submissions/${data.subId}`,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -150,7 +149,7 @@ function Mod() {
 
     const handleRemoveClick = async (id) => {
         try {
-            await axiosPrivate.delete('/submissions', { data: { id: id } },
+            await axiosPrivate.delete(`/submissions/${id}`,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true

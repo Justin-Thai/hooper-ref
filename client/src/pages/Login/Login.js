@@ -20,7 +20,7 @@ function Login() {
         const data = { username: username, password: password };
 
         try {
-            await axios.post("/auth", data,
+            await axios.post('/auth', data,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -28,7 +28,7 @@ function Login() {
             ).then((response) => {
                 const accessToken = response?.data?.accessToken;
 
-                setAuth({ username, accessToken });
+                setAuth({ accessToken });
                 resetUser();
                 setPassword('');
                 setErrMsg('');

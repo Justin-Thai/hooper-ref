@@ -8,9 +8,13 @@ const verifyRoles = require('../middlewares/verifyRoles');
 
 router.route('/')
     .get(entriesController.getAllEntries)
-    .post(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.createEntry)
+    .post(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.createEntry);
+
+router.route('/:id')
     .put(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.updateEntry)
     .delete(verifyJWT, verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Mod), entriesController.deleteEntry);
+
+router.get('/byUser/:id', entriesController.getUserEntries);
 
 router.get('/searchItems', entriesController.getSearchItems);
 
