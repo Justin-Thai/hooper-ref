@@ -16,6 +16,8 @@ router.route('/:id')
 
 router.get('/byUser/:id', entriesController.getUserEntries);
 
+router.get('/byPlayer/:id', entriesController.getPlayerEntries);
+
 router.get('/searchItems', entriesController.getSearchItems);
 
 router.get('/search', entriesController.getSearchResults);

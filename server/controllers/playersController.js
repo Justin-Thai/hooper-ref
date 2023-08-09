@@ -33,6 +33,23 @@ const createPlayer = async (req, res) => {
     return res.status(201).json(player);
 }
 
+// @desc Gets a player based on given player code
+// @route PUT /players/:playerCode
+//
+const getPlayer = async (req, res) => {
+    if (!req?.params?.playerCode) {
+        return res.status(400).json({ message: "Player code is required." });
+    }
+
+    const player = await Players.findOne({ where: { playerCode: req.params.playerCode } });
+
+    if (!player) {
+        return res.status(204).json({ message: "No player found." });
+    }
+
+    return res.json(player);
+}
+
 // @desc Updates a current player
 // @route PUT /players/:id
 //
@@ -79,6 +96,7 @@ const deletePlayer = async (req, res) => {
 module.exports = {
     getAllPlayers,
     createPlayer,
+    getPlayer,
     updatePlayer,
     deletePlayer
 }

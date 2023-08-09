@@ -24,7 +24,7 @@ function App() {
 					<Route exact path="/search" element={<Search />} />
 					<Route exact path="/unauthorized" element={<Unauthorized />} />
 					<Route exact path="/profile/:username" element={<UserProfile />} />
-					<Route exact path="/player" element={<PlayerProfile />} />
+					<Route exact path="/player/:playercode" element={<PlayerProfile />} />
 
 					{/* Protected routes */}
 					<Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Mod, ROLES.Admin]} />}>
