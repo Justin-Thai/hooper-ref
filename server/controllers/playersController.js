@@ -1,5 +1,7 @@
-const { Players, Sequelize } = require('../models');
+const { Players } = require('../models');
+const { spawnSync }  = require('child_process');
 
+const webScraperLocation = '../web_scraper/bf_web_scraper.py';
 
 // @desc Gets all players
 // @route GET /players
@@ -47,7 +49,26 @@ const getPlayer = async (req, res) => {
         return res.status(204).json({ message: "No player found." });
     }
 
-    return res.json(player);
+    let result = {
+        'id': player.id,
+        'name': player.name,
+        'playerCode': player.playerCode
+    }
+    
+    try {
+        const webScraperProcess = spawnSync('../web_scraper/project_env/Scripts/python', [webScraperLocation, player.playerCode]);
+        if (webScraperProcess.status !== 0) {
+            console.error(`Child process error:\n ${webScraperProcess.stderr.toString()}`);
+            console.error(`Child process exited with code ${webScraperProcess.status}.`);
+        }
+        const playerData = JSON.parse(webScraperProcess.stdout.toString());
+        result.data = playerData;
+    }
+    catch (err) {
+        console.error(err);
+    }   
+
+    return res.json(result);
 }
 
 // @desc Updates a current player

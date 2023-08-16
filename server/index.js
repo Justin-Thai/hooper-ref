@@ -28,7 +28,7 @@ const authRouter = require('./routes/Auth');
 app.use('/auth', authRouter);
 
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync().then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });

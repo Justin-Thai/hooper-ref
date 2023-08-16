@@ -11,17 +11,9 @@ function Profile() {
 	let { playercode } = useParams();
 	const [player, setPlayer] = useState({});
 	const [playerImage, setPlayerImage] = useState("");
+	const [playerData, setPlayerData] = useState({});
+	const [playerStats, setPlayerStats] = useState({});
 	const [listOfEntires, setListOfEntries] = useState([]);
-	const playerInfo = {
-		"Nicknames": "Pip, Scott, Batman, Robin",
-		"Position(s)": "SF",
-		"Height/Weight": "6ft 8in, 210 lbs",
-		"DOB": "1965-09-25",
-		"Birthplace": "Hamburg, Arkansas",
-		"Status": "Retired",
-		"Debut": "1987-11-07",
-		"Total Seasons": 17,
-	}
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -32,7 +24,9 @@ function Profile() {
 				navigate('/404-error', { state: { from: location }, replace: true });
 			}
 			setPlayer(response.data);
-			setPlayerImage(`https://www.basketball-reference.com/req/202106291/images/headshots/${playercode}.jpg`);
+			setPlayerImage(response.data.data.image_src);
+			setPlayerData(response.data.data);
+			setPlayerStats(response.data.data.stats);
 
 			axios.get(`/entries/byPlayer/${response.data.id}`).then((response) => {
 				setListOfEntries(response.data);
@@ -64,24 +58,48 @@ function Profile() {
 							onClick={() => goToBFPage(player.playerCode)}
 						/>
 					</div>
-					{Object.entries(playerInfo).map(([key, value]) => {
-						return (
-							<div className="player-category">
-								<span>{key}: </span>
-								<span className="player-category-text">{value}</span>
-							</div>
-						);
-					})}
+					<div className="player-category">
+						<span>Nicknames: </span>
+						<span className="player-category-text">{playerData.nicknames}</span>
+					</div>
+					<div className="player-category">
+						<span>Position(s): </span>
+						<span className="player-category-text">{playerData.positions}</span>
+					</div>
+					<div className="player-category">
+						<span>Height/Weight: </span>
+						<span className="player-category-text">{playerData.bmi}</span>
+					</div>
+					<div className="player-category">
+						<span>DOB: </span>
+						<span className="player-category-text">{playerData.dob}</span>
+					</div>
+					<div className="player-category">
+						<span>Birthplace: </span>
+						<span className="player-category-text">{playerData.birthplace}</span>
+					</div>
+					<div className="player-category">
+						<span>Debut: </span>
+						<span className="player-category-text">{playerData.debut}</span>
+					</div>
+					<div className="player-category">
+						<span>Total Seasons: </span>
+						<span className="player-category-text">{playerData.seasons}</span>
+					</div>
+					<div className="player-category">
+						<span>Status: </span>
+						<span className="player-category-text">{playerData.status}</span>
+					</div>
 				</div>
 			</div>
 			<div className="player-resume-container">
 				<div className="player-resume-teams">
 					<span>Teams: </span>
-					<span className="player-category-text">CHI, HOU, POR</span>
+					<span className="player-category-text">{playerData.teams}</span>
 				</div>
 				<div className="player-resume-awards">
 					<span>Accolades: </span>
-					<span className="player-category-text">Hall of Fame, 7x All-Star, 1994-95 STL Champ, 6x NBA Champ, 7x All-NBA, 10x All-Defensive, 1993-94 AS MVP, NBA 75th Anniv. Team</span>
+					<span className="player-category-text">{playerData.awards}</span>
 				</div>
 				<div className="player-resume-stats">
 					<div>Career Statistics</div>
@@ -102,16 +120,16 @@ function Profile() {
 						</thead>
 						<tbody>
 							<tr>
-								<td>1178</td>
-								<td>16.1</td>
-								<td>6.4</td>
-								<td>5.2</td>
-								<td>2.0</td>
-								<td>0.8</td>
-								<td>47.3</td>
-								<td>32.6</td>
-								<td>70.4</td>
-								<td>2.8</td>
+								<td>{playerStats.g}</td>
+								<td>{playerStats.pts_per_g}</td>
+								<td>{playerStats.trb_per_g}</td>
+								<td>{playerStats.ast_per_g}</td>
+								<td>{playerStats.stl_per_g}</td>
+								<td>{playerStats.blk_per_g}</td>
+								<td>{playerStats.fg_pct}</td>
+								<td>{playerStats.fg3_pct}</td>
+								<td>{playerStats.ft_pct}</td>
+								<td>{playerStats.tov_per_g}</td>
 							</tr>
 						</tbody>
 					</table>
