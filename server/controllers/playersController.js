@@ -1,6 +1,8 @@
 const { Players } = require('../models');
 const { spawnSync }  = require('child_process');
+const redisClient = require('../utils/redis');
 
+const DEFAULT_EXPIRATION = 300;    // Seconds
 const webScraperLocation = '../web_scraper/bf_web_scraper.py';
 
 // @desc Gets all players
@@ -50,23 +52,42 @@ const getPlayer = async (req, res) => {
     }
 
     let result = {
-        'id': player.id,
-        'name': player.name,
-        'playerCode': player.playerCode
+        'playerKey': {
+            'id': player.id,
+            'name': player.name,
+            'playerCode': player.playerCode
+        }
     }
     
-    try {
-        const webScraperProcess = spawnSync('../web_scraper/project_env/Scripts/python', [webScraperLocation, player.playerCode]);
-        if (webScraperProcess.status !== 0) {
-            console.error(`Child process error:\n ${webScraperProcess.stderr.toString()}`);
-            console.error(`Child process exited with code ${webScraperProcess.status}.`);
-        }
-        const playerData = JSON.parse(webScraperProcess.stdout.toString());
-        result.data = playerData;
+    const [bio, stats] = await Promise.all([
+        redisClient.get(`bio:${player.playerCode}`),
+        redisClient.get(`stats:${player.playerCode}`)
+    ]);
+
+    if (bio != null && stats != null) {
+        result.bio = JSON.parse(bio);
+        result.stats = JSON.parse(stats);   
     }
-    catch (err) {
-        console.error(err);
-    }   
+    else {
+        try {
+            const webScraperProcess = spawnSync('../web_scraper/project_env/Scripts/python', [webScraperLocation, player.playerCode]);
+            if (webScraperProcess.status !== 0) {
+                console.error(`Child process error:\n ${webScraperProcess.stderr.toString()}`);
+                console.error(`Child process exited with code ${webScraperProcess.status}.`);
+            }
+            const playerData = JSON.parse(webScraperProcess.stdout.toString());
+            result.bio = playerData.bio;
+            result.stats = playerData.stats;
+
+            await Promise.all([
+                redisClient.setEx(`bio:${player.playerCode}`, DEFAULT_EXPIRATION, JSON.stringify(playerData.bio)),
+                redisClient.setEx(`stats:${player.playerCode}`, DEFAULT_EXPIRATION, JSON.stringify(playerData.stats))
+            ]);
+        }
+        catch (err) {
+            console.error(err);
+        }   
+    }
 
     return res.json(result);
 }

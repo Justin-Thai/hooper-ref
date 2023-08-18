@@ -11,7 +11,7 @@ function Profile() {
 	let { playercode } = useParams();
 	const [player, setPlayer] = useState({});
 	const [playerImage, setPlayerImage] = useState("");
-	const [playerData, setPlayerData] = useState({});
+	const [playerInfo, setPlayerInfo] = useState({});
 	const [playerStats, setPlayerStats] = useState({});
 	const [listOfEntires, setListOfEntries] = useState([]);
 
@@ -23,12 +23,12 @@ function Profile() {
 			if (response.status === 204) {
 				navigate('/404-error', { state: { from: location }, replace: true });
 			}
-			setPlayer(response.data);
-			setPlayerImage(response.data.data.image_src);
-			setPlayerData(response.data.data);
-			setPlayerStats(response.data.data.stats);
+			setPlayer(response.data.playerKey);
+			setPlayerImage(response.data.bio.image_src);
+			setPlayerInfo(response.data.bio);
+			setPlayerStats(response.data.stats);
 
-			axios.get(`/entries/byPlayer/${response.data.id}`).then((response) => {
+			axios.get(`/entries/byPlayer/${response.data.playerKey.id}`).then((response) => {
 				setListOfEntries(response.data);
 			})
 		});
@@ -60,46 +60,46 @@ function Profile() {
 					</div>
 					<div className="player-category">
 						<span>Nicknames: </span>
-						<span className="player-category-text">{playerData.nicknames}</span>
+						<span className="player-category-text">{playerInfo.nicknames}</span>
 					</div>
 					<div className="player-category">
 						<span>Position(s): </span>
-						<span className="player-category-text">{playerData.positions}</span>
+						<span className="player-category-text">{playerInfo.positions}</span>
 					</div>
 					<div className="player-category">
 						<span>Height/Weight: </span>
-						<span className="player-category-text">{playerData.bmi}</span>
+						<span className="player-category-text">{playerInfo.bmi}</span>
 					</div>
 					<div className="player-category">
 						<span>DOB: </span>
-						<span className="player-category-text">{playerData.dob}</span>
+						<span className="player-category-text">{playerInfo.dob}</span>
 					</div>
 					<div className="player-category">
 						<span>Birthplace: </span>
-						<span className="player-category-text">{playerData.birthplace}</span>
+						<span className="player-category-text">{playerInfo.birthplace}</span>
 					</div>
 					<div className="player-category">
 						<span>Debut: </span>
-						<span className="player-category-text">{playerData.debut}</span>
+						<span className="player-category-text">{playerInfo.debut}</span>
 					</div>
 					<div className="player-category">
 						<span>Total Seasons: </span>
-						<span className="player-category-text">{playerData.seasons}</span>
+						<span className="player-category-text">{playerInfo.seasons}</span>
 					</div>
 					<div className="player-category">
 						<span>Status: </span>
-						<span className="player-category-text">{playerData.status}</span>
+						<span className="player-category-text">{playerInfo.status}</span>
 					</div>
 				</div>
 			</div>
 			<div className="player-resume-container">
 				<div className="player-resume-teams">
 					<span>Teams: </span>
-					<span className="player-category-text">{playerData.teams}</span>
+					<span className="player-category-text">{playerInfo.teams}</span>
 				</div>
 				<div className="player-resume-awards">
 					<span>Accolades: </span>
-					<span className="player-category-text">{playerData.awards}</span>
+					<span className="player-category-text">{playerInfo.awards}</span>
 				</div>
 				<div className="player-resume-stats">
 					<div>Career Statistics</div>

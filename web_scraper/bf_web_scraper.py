@@ -132,6 +132,20 @@ def get_player_data(player_code):
     #####   Getting career stats of player   #####
     table = doc.find(id='per_game')
 
+    # Teams played
+    table_body = table.find('tbody')
+    td_list = table_body.find_all('td', class_='left')
+    teams_td = list(filter(lambda t: t.attrs.get('data-stat') == 'team_id', td_list))
+    teams_list = list(map(lambda t: t.string, teams_td))
+    teams = []
+    for t in teams_list:
+        if (t not in teams) and (t != 'TOT'):
+            teams.append(t)
+    if len(teams) != 0:
+        data['teams'] = ', '.join(teams)
+    else:
+        data['teams'] = 'N/A'
+
     # Career averages
     table_footer = table.find('tfoot')
     stats_keys = ['g', 'pts_per_g', 'trb_per_g', 'ast_per_g', 'stl_per_g', 'blk_per_g', 'fg_pct', 'fg3_pct', 'ft_pct', 'tov_per_g'] 
@@ -153,24 +167,15 @@ def get_player_data(player_code):
     for s in stats:
         if stats[s] is None:
             stats[s] = 'N/A'
-    data['stats'] = stats
+    
 
-    # Teams played
-    table_body = table.find('tbody')
-    td_list = table_body.find_all('td', class_='left')
-    teams_td = list(filter(lambda t: t.attrs.get('data-stat') == 'team_id', td_list))
-    teams_list = list(map(lambda t: t.string, teams_td))
-    teams = []
-    for t in teams_list:
-        if (t not in teams) and (t != 'TOT'):
-            teams.append(t)
-    if len(teams) != 0:
-        data['teams'] = ', '.join(teams)
-    else:
-        data['teams'] = 'N/A'
+    #####   Saving data and stats to    #####   
+    playerData = {
+        'bio': data,
+        'stats': stats 
+    }
 
-
-    return data
+    return playerData
 
 
 # Main Script
