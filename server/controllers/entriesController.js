@@ -106,6 +106,44 @@ const getUserEntries = async (req, res) => {
         ]
     });
 
+    if (listOfEntries.length === 0) {
+        return res.status(204).json({ message: "No entries found." });
+    }
+
+    return res.json(listOfEntries);
+}
+
+
+//  @desc Gets all song entries that references a specific player
+//  @route GET /entries/byPlayer/:id
+//
+const getPlayerEntries = async (req, res) => {
+    if (!req?.params?.id) { 
+        return res.status(400).json({ message: "Player ID is required." });
+    }
+
+    const listOfEntries = await Entries.findAll({
+        where: { PlayerId: req.params.id }, 
+        attributes: [
+            'id',
+            'song',
+            'artist',
+            'album',
+            'year',
+            'excerpt',
+            'link',
+            [Sequelize.col('Player.name'), 'playerName'],
+            [Sequelize.col('Player.playerCode'), 'playerCode'],
+        ],
+        include: [
+            { model: Players, attributes: [] }
+        ]
+    });
+
+    if (listOfEntries.length === 0) {
+        return res.status(204).json({ message: "No entries found." });
+    }
+
     return res.json(listOfEntries);
 }
 
@@ -163,11 +201,19 @@ const getSearchResults = async (req, res) => {
                 )
             ]
         },
+        attributes: [
+            'id',
+            'song',
+            'artist',
+            'album',
+            'year',
+            'excerpt',
+            'link',
+            [Sequelize.col('Player.name'), 'playerName'],
+            [Sequelize.col('Player.playerCode'), 'playerCode'],
+        ],
         include: [
-            {
-                model: Players,
-                attributes: ['name', 'playerCode']
-            }
+            { model: Players, attributes: [] }
         ]
     });
 
@@ -193,6 +239,7 @@ module.exports = {
     updateEntry,
     deleteEntry,
     getUserEntries,
+    getPlayerEntries,
     getSearchItems,
     getSearchResults,
     getPlayerCount,

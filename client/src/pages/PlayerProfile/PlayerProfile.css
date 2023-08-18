@@ -8,3 +8,135 @@
     justify-content: center;
     padding-top: 125px;
 }
+
+.player-profile-container {
+    width: 50%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    column-gap: 15px;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+
+/* Player Profile Picture Components */
+
+.player-profile-picture {
+    margin: auto;
+}
+
+.player-image {
+    height: 270px;
+    width: 180px;
+    display: flex;
+    object-fit: cover;
+}
+
+
+/* Player Profile Info Components */
+
+.player-profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.player-profile-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.player-name {
+    font-size: 2.75rem;
+}
+
+.icon-ball {
+    width: 33px;
+    height: 33px;
+    color: var(--white);
+    margin-left: 25px;
+    cursor: pointer;
+}
+
+.icon-ball:hover {
+    color: orange;
+}
+
+.player-category {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    max-width: 500px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.player-category:hover {
+    overflow: visible;
+    white-space: normal;
+    height: auto;
+}
+
+.player-category-text {
+    color: var(--gray);
+}
+
+
+/* Player Profile Career Resume Components */
+
+.player-resume-container {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+}
+
+.player-resume-teams {
+    max-width: 100%;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+
+.player-resume-awards {
+    max-width: 100%;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.player-resume-stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-resume-stats > div {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--white);
+}
+
+.stats-table {
+    width: 100%;
+}
+
+.stats-table thead th {
+    font-weight: normal;
+}
+
+.stats-table tbody {
+    color: var(--gray);
+}
+
+.stats-table tbody tr td:first-child::before {
+    content: none;
+}
+

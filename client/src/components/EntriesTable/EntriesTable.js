@@ -1,5 +1,6 @@
 import './EntriesTable.css';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { sortItemsByCat } from '../../util/Utils';
@@ -11,6 +12,7 @@ function EntriesTable({ header, entries }) {
 	const [sortDropdown, setSortDropdown] = useState(false);
 	const sortElement = document.getElementById("dropdown-options");
 	let domNode = useClickOutside(() => { setSortDropdown(false); });
+	let navigate= useNavigate();
 
 	let sortHandler = (event) => {
 		const option = event.target;
@@ -34,10 +36,6 @@ function EntriesTable({ header, entries }) {
 	const openSortDropdown = () => {
 		sortElement.addEventListener("click", sortHandler);
 		setSortDropdown(!sortDropdown);
-	}
-
-	const goToPlayerPage = (code) => {
-		window.open(`https://www.basketball-reference.com/players/${code.charAt(0)}/${code}.html`)
 	}
 
 	return (
@@ -86,7 +84,7 @@ function EntriesTable({ header, entries }) {
 								</td>
 								<td className="entry-player" 
 									onClick={
-										() => goToPlayerPage(value.playerCode)
+										() => navigate(`/player/${value.playerCode}`)
 									}
 								>
 									{value.playerName}
