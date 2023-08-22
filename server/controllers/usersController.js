@@ -7,6 +7,8 @@ const imageSignatures = {
     jpg: "/9j/"
 };
 
+const mailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
 //  @desc Gets all users
 //  @route GET /users
 //
@@ -216,11 +218,37 @@ const updateUserPrivilege = async (req, res) => {
     return res.json(result);
 }
 
+//  @desc Sends an email that contains a verification code for resetting a password
+//  @route POST /users/sendRecoveryCode
+//
+const sendRecoveryCode = async (req, res) => {
+    const email = req.body?.email;
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required to send the code." });
+    }
+
+    if (!mailRegex.test(email)) {
+        return res.status(400).json({ message: "An invalid email was entered." });
+    }
+
+    const emailCheck = await Users.findOne({ where: { email: email } });
+    if (!emailCheck) {
+        return res.status(204).json({ message: `No user is registered with the email ${email}.` });
+    }
+
+    const recCode = Math.floor((Math.random() * 90000) + 10000);
+
+    // Redis cache here
+    // Send email here
+}
+
 module.exports = {
     createUser,
     getAllUsers,
     getUser,
     updateUser,
     deleteUser,
-    updateUserPrivilege
+    updateUserPrivilege,
+    sendRecoveryCode
 }

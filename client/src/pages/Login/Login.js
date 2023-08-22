@@ -64,7 +64,7 @@ function Login() {
             />
             <div className="subtext">
                 <span>Forgot your password?</span>
-                <span className="subtext-clickable">Click Here</span>
+                <span className="subtext-clickable" onClick={() => navigate('/forgotpass')}>Click Here</span>
             </div>
             <button className="login-button" onClick={signIn}>Sign In</button>
             <div className="persist-check">
@@ -80,7 +80,7 @@ function Login() {
                 <span>Don't have an account?</span>
                 <span
                     className="subtext-clickable"
-                    onClick={() => navigate(`/signup`)}
+                    onClick={() => navigate('/signup')}
                 >
                     Sign Up
                 </span>
