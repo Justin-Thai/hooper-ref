@@ -19,6 +19,7 @@
     "express-rate-limit": "^6.7.0",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.1.2",
+    "nodemailer": "^6.9.4",
     "nodemon": "^2.0.20",
     "redis": "^4.6.7",
     "sequelize": "^6.28.0",

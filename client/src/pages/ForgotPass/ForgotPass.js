@@ -1,5 +1,5 @@
 import './ForgotPass.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from '../../api/axios';
 
 function ForgotPass() {
@@ -7,7 +7,8 @@ function ForgotPass() {
     const [email, setEmail] = useState('');
     const [errMsg, setErrMsg] = useState("");
 
-    const [pincode, setPincode] = useState([null, null, null, null, null]);
+    const pinRef = useRef([]);
+    const [pincode, setPincode] = useState(['', '', '', '', '']);
     const [timer, setTimer] = useState(60);
     const [disableResend, setDisableResend] = useState(false);
 
@@ -24,6 +25,8 @@ function ForgotPass() {
                 return lastCount - 1;
             });
         }, 1000);
+
+        changeFieldFocus(0);
 
         return () => clearInterval(interval);
     }, [disableResend]);
@@ -83,10 +86,40 @@ function ForgotPass() {
         }
     };
 
-    const updatePincode = (text, index) => {
+    const changeFieldFocus = (index) => {
+        const ref = pinRef.current[index];
+        if (ref) {
+            ref.focus();
+        }
+    };
+
+    const keyPressed = (key, index) => {
+        if (key !== 'Backspace') {
+            return;
+        }
+
+        if (pincode[index] === '') {
+            changeFieldFocus(index - 1);
+        }
+        else {
+            let pinCopy = [...pincode];
+            pinCopy[index] = '';
+            setPincode(pinCopy); 
+        }
+    };
+
+    const updateField = (input, index) => {
+        if (isNaN(input) || input === '') {
+            return;
+        }
+
         let pinCopy = [...pincode];
-        pinCopy[index] = text;
-        setPincode(pinCopy);
+        pinCopy[index] = input;
+        setPincode(pinCopy);     
+        
+        if (index < pinCopy.length - 1) {
+            changeFieldFocus(index + 1);
+        }
     };
 
     return (
@@ -105,8 +138,15 @@ function ForgotPass() {
                                 <input
                                     maxLength={1}
                                     className="recovery-pin-input"
+                                    ref={(el) => {
+                                        if (el) {
+                                            pinRef.current[index] = el;
+                                        }
+                                    }}
                                     type="text"
-                                    onChange={(e) => updatePincode(e.target.value, index)}
+                                    onKeyDown={(e) => keyPressed(e.key, index)}
+                                    onChange={(e) => updateField(e.target.value, index)}
+                                    value={pincode[index] || ''}
                                 />
                             );
                         })}
