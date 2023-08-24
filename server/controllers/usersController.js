@@ -2,6 +2,7 @@ const { Users, Entries, Sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
 const cloudinary = require('../utils/cloudinary');
 
+
 const imageSignatures = {
     png: "iVBORw0KGgo",
     jpg: "/9j/"
@@ -215,6 +216,7 @@ const updateUserPrivilege = async (req, res) => {
     const result = await user.save();
     return res.json(result);
 }
+
 
 module.exports = {
     createUser,

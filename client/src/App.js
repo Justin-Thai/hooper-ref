@@ -2,7 +2,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import RequireAuth from './components/RequireAuth';
-import { Home, Login, Registration, Suggest, Archive, Search, UserProfile, PlayerProfile, Mod, Admin, Unauthorized, Missing } from './pages';
+import { Home, Login, Registration, ForgotPass, ResetPass, Suggest, Archive, Search, UserProfile, PlayerProfile, Mod, Admin, Unauthorized, Missing } from './pages';
 
 const ROLES = {
 	"User": "user",
@@ -20,6 +20,8 @@ function App() {
 					<Route exact path="/" element={<Home />} />
 					<Route exact path="/login" element={<Login />} />
 					<Route exact path="/signup" element={<Registration />} />
+					<Route exact path="/forgotpass" element={<ForgotPass />} />
+					<Route exact path="/resetpass/:user/:resetToken" element={<ResetPass />} />
 					<Route exact path="/archive" element={<Archive />} />
 					<Route exact path="/search" element={<Search />} />
 					<Route exact path="/unauthorized" element={<Unauthorized />} />

@@ -44,7 +44,7 @@ function Registration() {
 
     const onSumbit = async (data) => {
         try {
-            await axios.post('/users', data).then((response) => {
+            await axios.post('/users', data).then(() => {
                 setSuccess(true);
             });
         }
@@ -64,7 +64,7 @@ function Registration() {
             {success ? (
                 <>
                     <div className="success-text">Success! Your account has been created.</div>
-                    <button className="sign-in-button" onClick={() => navigate(`/login`)}>Sign In</button>
+                    <button className="navigate-button" onClick={() => navigate(`/login`)}>Sign In</button>
                 </>
             ) : (
                 <>
