@@ -1,8 +1,11 @@
 import './ForgotPass.css';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
 
 function ForgotPass() {
+    const navigate = useNavigate();
+
     const [sent, setSent] = useState(false);
     const [email, setEmail] = useState('');
     const [errMsg, setErrMsg] = useState("");
@@ -32,14 +35,15 @@ function ForgotPass() {
     }, [disableResend]);
 
     const sendCode = async () => {
-        const data = email;
+        const data = { email: email };
 
         try {
-            console.log("Sent code");
-            // axios post request here
-            setDisableResend(true);
-            setTimer(60);
-            setSent(true);
+            await axios.post('/auth/sendRecoveryCode', data).then(() => {
+                setDisableResend(true);
+                setTimer(60);
+                setSent(true);
+                setErrMsg("");
+            }) ;
         }
         catch (err) {
             if (!err?.response) {
@@ -52,13 +56,16 @@ function ForgotPass() {
     };
 
     const resendCode = async () => {
+        const data = { email: email };
+
         if (!disableResend) {
             try {
-                console.log("Resent code");
-                // axios post request here
-                setDisableResend(true);
-                setTimer(60);
-                setSent(true);
+                await axios.post('/auth/sendRecoveryCode', data).then(() => {
+                    setDisableResend(true);
+                    setTimer(60);
+                    setSent(true);
+                    setErrMsg("");
+                }) ;
             }
             catch (err) {
                 if (!err?.response) {
@@ -72,9 +79,14 @@ function ForgotPass() {
     };
 
     const verifyCode = async () => {
+        const code = pincode.join('');
+        console.log(code);
+        const data = { email: email, code: code };
+
         try {
-            console.log("Verified code");
-            // axios request and redirect goes here
+            await axios.post('/auth/checkRecoveryCode', data).then((response) => {
+                navigate(`/resetpass/${response.data.user}/${response.data.resetToken}`);
+            });
         }
         catch (err) {
             if (!err?.response) {
@@ -124,13 +136,13 @@ function ForgotPass() {
 
     return (
         <div className="forgot-page">
-            <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
             {sent ? (
                 <>
                     <div className="forgot-page-description">
                         <div>A code has been sent to the email:</div>
-                        <div>TempEmail@email.com</div>
+                        <div>{email}</div>
                     </div>
+                    <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                     <label>Verification</label>
                     <div className="forgot-page-pin-container">
                         {pincode.map((value, index) => {
@@ -169,6 +181,7 @@ function ForgotPass() {
             ) : (
                 <>
                     <div className="forgot-page-description">Please enter your email so a code can be sent to your email to change your password.</div>
+                    <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                     <label>Email</label>
                     <input
                         type="email"

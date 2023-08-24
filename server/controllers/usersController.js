@@ -1,62 +1,11 @@
 const { Users, Entries, Sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
 const cloudinary = require('../utils/cloudinary');
-const redisClient = require('../utils/redis');
-const nodemailer = require('nodemailer');
+
 
 const imageSignatures = {
     png: "iVBORw0KGgo",
     jpg: "/9j/"
-};
-const mailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const DEFAULT_EXPIRATION = 600;    // Seconds
-const htmlOutput = (recCode, username) => {
-    return (
-        `<!DOCTYPE html>
-        <html lang="en">
-        
-        <head>
-            <meta charset="UTF-8">
-            <title>HooperRef Password Recovery Email</title>
-        
-        </head>
-        
-        <body style="
-            max-height: 1500px;
-            max-width: 750px;
-            background-color: #191414; 
-            color: #ffffff; 
-            font-size: 16px;
-            font-family: sans-serif, Helvetica, Arial;
-            padding: 25px;"
-        >
-            <div style="font-size: 2rem; margin-top: 25px; margin-bottom: 25px;">HooperRef</div>
-            <hr style="margin-bottom: 50px; color: #bbbbbb;">
-            <div style="margin-bottom: 15px;">Hello ${username}!</div>
-            <div style="margin-bottom: 15px;">Did you request to reset your password for your HooperRef account?</div>
-            <div style="margin-bottom: 15px;">If so, please use the code below to reset your password. <strong>The code will expire in 10 minutes.</strong></div>
-            <div style="margin-bottom: 15px;">
-                <div style="
-                    width: 100px; 
-                    height: 40px;
-                    background-color: #bbbbbb;
-                    color: #191414;
-                    font-size: 1.5rem;
-                    border-radius: 15px;
-                    text-align: center;
-                    padding-top: 15px;
-                    margin: auto;"
-                >
-                    ${recCode}
-                </div>
-            </div>
-            <div style="margin-bottom: 15px;">If you did not request a password reset code, please ignore this email.</div>
-            <div style="margin-bottom: 50px;">Thank you for continuing to be a part of the HooperRef community!</div>
-            <div>- The HooperRef Team &#127936;</div>
-        </body>
-        
-        </html>`
-    );
 };
 
 //  @desc Gets all users
@@ -268,68 +217,6 @@ const updateUserPrivilege = async (req, res) => {
     return res.json(result);
 }
 
-//  @desc Sends an email that contains a verification code for resetting a password
-//  @route POST /users/sendRecoveryCode
-//
-const sendRecoveryCode = async (req, res) => {
-    const email = req.body?.email;
-
-    if (!email) {
-        return res.status(400).json({ message: "Email is required to send the code." });
-    }
-
-    if (!mailRegex.test(email)) {
-        return res.status(400).json({ message: "An invalid email was entered." });
-    }
-
-    const user = await Users.findOne({ where: { email: email } });
-    if (!user) {
-        return res.status(204).json({ message: `No user is registered with the email ${email}.` });
-    }
-
-    try {
-        const recCode = Math.floor((Math.random() * 90000) + 10000);
-        await redisClient.setEx(`recoveryOTP:${user.username}`, DEFAULT_EXPIRATION, recCode.toString());
-
-        // const transporter = nodemailer.createTransport({
-        //     service: 'smtp.gmail.com',
-        //     port: 465,
-        //     secure: true,
-        //     auth: {
-        //         email: process.env.EMAIL_ADDRESS,
-        //         password: process.env.EMAIL_PASSWORD
-        //     },
-        //     tls: {
-        //         rejectUnauthorized: false
-        //     }
-        // });
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_ADDRESS,
-                pass: process.env.EMAIL_PASSWORD
-            }
-        });
-
-        let mailOptions = {
-            from: `HooperRef <${process.env.EMAIL_ADDRESS}>`,
-            to: user.email,
-            subject: 'Your password recovery code',
-            html: htmlOutput(recCode, user.username)
-        };
-
-        await transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error(error);
-            }
-
-            res.json(info?.messageId);
-        });
-    }
-    catch (err) {
-        console.error(err);
-    } 
-}
 
 module.exports = {
     createUser,
@@ -337,6 +224,5 @@ module.exports = {
     getUser,
     updateUser,
     deleteUser,
-    updateUserPrivilege,
-    sendRecoveryCode
+    updateUserPrivilege
 }

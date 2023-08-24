@@ -18,6 +18,5 @@ router.route('/:id')
 
 router.put('/mod/:id', verifyJWT, verifyRoles(ROLES_LIST.Admin), usersController.updateUserPrivilege);
 
-router.post('/sendRecoveryCode', usersController.sendRecoveryCode);
 
 module.exports = router;
