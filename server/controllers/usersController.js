@@ -1,4 +1,5 @@
 const { Users, Entries, Sequelize } = require('../models');
+const Op = Sequelize.Op;
 const bcrypt = require('bcryptjs');
 const cloudinary = require('../utils/cloudinary');
 
@@ -131,7 +132,7 @@ const updateUser = async (req, res) => {
             if (emailCheck) {
                 return res.status(409).json({ message: "Email is already being used." });
             }
-    
+
             user.email = req.body.email;
         }
     }
@@ -217,6 +218,51 @@ const updateUserPrivilege = async (req, res) => {
     return res.json(result);
 }
 
+// @desc Gets a list of users' usernames (for searching purposes)
+// @route GET /users/search/names
+//
+const getUserNames = async (req, res) => {
+    const listOfNames = await Users.findAll({
+        attributes: ['username']
+    });
+
+    if (!listOfNames) {
+        return res.status(204).json({ message: "No users found." });
+    }
+
+    const resList = [];
+    listOfNames.map((value) => {
+        resList.push(value.username);
+    });
+
+    return res.json(resList);
+}
+
+// @desc Gets all users based on search query
+// @route GET /users/search/user
+//
+const getUserSearchResults = async (req, res) => {
+    const query = req.query.q.toLowerCase();
+
+    const listOfUsers = await Users.findAll({
+        where: Sequelize.where(
+            Sequelize.fn('lower', Sequelize.col('username')),
+            {
+                [Op.like]: '%' + query + '%'
+            }
+        ),
+        attributes: [
+            'username',
+            'image_url'
+        ]
+    });
+
+    listOfUsers.sort((a, b) => {
+        return a.username.localeCompare(b.name);
+    });
+
+    return res.json(listOfUsers);
+}
 
 module.exports = {
     createUser,
@@ -224,5 +270,7 @@ module.exports = {
     getUser,
     updateUser,
     deleteUser,
-    updateUserPrivilege
+    updateUserPrivilege,
+    getUserNames,
+    getUserSearchResults
 }

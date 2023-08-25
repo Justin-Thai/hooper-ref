@@ -35,7 +35,6 @@ const createEntry = async (req, res) => {
     return res.status(201).json(entry);
 }
 
-/***** UPDATE *****/
 //  @desc Updates a song entry
 //  @route PUT /entries/:id
 //
@@ -54,9 +53,17 @@ const updateEntry = async (req, res) => {
     if (req.body?.artist) entry.artist = req.body.artist;
     if (req.body?.album) entry.album = req.body.album;
     if (req.body?.year) entry.year = req.body.year;
-    if (req.body?.player) entry.PlayerId = req.body.playerId; // CHANGE
     if (req.body?.excerpt) entry.excerpt = req.body.excerpt;
     if (req.body?.link) entry.link = req.body.link;
+
+    if (req.body?.playerId) {
+        const player = await Players.findOne({ where: { id: req.body.playerId } });
+        if (!player) {
+            return res.json(400).json({ message: `No player matches ID ${req.body.playerId}`});
+        }
+        
+        entry.PlayerId = req.body.playerId;
+    }
 
     const result = await entry.save();
     return res.json(result);

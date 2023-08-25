@@ -9,7 +9,15 @@ function Home() {
 
 	useEffect(() => {
 		axios.get('/entries/searchItems').then((response) => {
-			setListOfItems(response.data);
+			const totalItems = response.data;
+
+			axios.get('users/search/names').then((response) => {
+				response.data.forEach((value) => {
+					totalItems.push(value);
+				});
+	
+				setListOfItems(totalItems);
+			})
 		});
 	}, []);
 

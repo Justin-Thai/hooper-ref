@@ -12,7 +12,7 @@ function EntriesTable({ header, entries }) {
 	const [sortDropdown, setSortDropdown] = useState(false);
 	const sortElement = document.getElementById("dropdown-options");
 	let domNode = useClickOutside(() => { setSortDropdown(false); });
-	let navigate= useNavigate();
+	let navigate = useNavigate();
 
 	let sortHandler = (event) => {
 		const option = event.target;
@@ -42,66 +42,75 @@ function EntriesTable({ header, entries }) {
 		<div>
 			<div className="entries-header-container">
 				<div className="entries-header">{header} ({listOfEntries.length})</div>
-				<div ref={domNode} className="dropdown">
-					<button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
-					<ul
-						className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
-						onClick={() => setSortDropdown(false)}
-						id="dropdown-options"
-					>
-						<li className="li-sort-asc">Default</li>
-						<li>Title</li>
-						<li>Artist</li>
-						<li>Album</li>
-						<li>Year</li>
-						<li>Player</li>
-					</ul>
-				</div>
+				{listOfEntries.length === 0 ? (
+					<div></div>
+				) : (
+					<div ref={domNode} className="dropdown">
+						<button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
+						<ul
+							className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
+							onClick={() => setSortDropdown(false)}
+							id="dropdown-options"
+						>
+							<li className="li-sort-asc">Default</li>
+							<li>Title</li>
+							<li>Artist</li>
+							<li>Album</li>
+							<li>Year</li>
+							<li>Player</li>
+						</ul>
+					</div>
+				)}
 			</div>
-			<table className="entry-table">
-				<thead>
-					<tr>
-						<th className="entry-table-number">#</th>
-						<th className="entry-table-title">Title</th>
-						<th className="entry-table-album">Album</th>
-						<th className="entry-table-player">Player Ref.</th>
-						<th className="entry-table-excerpt">Excerpt</th>
-						<th className="entry-table-link">Link</th>
-					</tr>
-				</thead>
-				<tbody>
-					{listOfEntries.map((value) => {
-						return (
-							<tr key={value.id}>
-								<td></td>
-								<td>
-									<div className="entry-song">{value.song}</div>
-									<div>{value.artist}</div>
-								</td>
-								<td>
-									<div>{value.album}</div>
-									<div>({value.year})</div>
-								</td>
-								<td className="entry-player" 
-									onClick={
-										() => navigate(`/player/${value.playerCode}`)
-									}
-								>
-									{value.playerName}
-								</td>
-								<td className="entry-excerpt">"{value.excerpt}"</td>
-								<td className="entry-link">
-									<div onClick={() => {
-										window.open(value.link, "_blank");
-									}}>
-										<FontAwesomeIcon icon={faSpotify} className="icon-spotify" />
-									</div>
-								</td>
-							</tr>
-						);
-					})}
-				</tbody>
-			</table>
+			{listOfEntries.length === 0 ? (
+				<div className="no-entries-text">No songs found</div>
+			) : (
+				<table className="entry-table">
+					<thead>
+						<tr>
+							<th className="entry-table-number">#</th>
+							<th className="entry-table-title">Title</th>
+							<th className="entry-table-album">Album</th>
+							<th className="entry-table-player">Player Ref.</th>
+							<th className="entry-table-excerpt">Excerpt</th>
+							<th className="entry-table-link">Link</th>
+						</tr>
+					</thead>
+					<tbody>
+						{listOfEntries.map((value) => {
+							return (
+								<tr key={value.id}>
+									<td></td>
+									<td>
+										<div className="entry-song">{value.song}</div>
+										<div>{value.artist}</div>
+									</td>
+									<td>
+										<div>{value.album}</div>
+										<div>({value.year})</div>
+									</td>
+									<td className="entry-player"
+										onClick={
+											() => navigate(`/player/${value.playerCode}`)
+										}
+									>
+										{value.playerName}
+									</td>
+									<td className="entry-excerpt">"{value.excerpt}"</td>
+									<td className="entry-link">
+										<div onClick={() => {
+											window.open(value.link, "_blank");
+										}}>
+											<FontAwesomeIcon icon={faSpotify} className="icon-spotify" />
+										</div>
+									</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			)}
+
 		</div>
 	)
 }

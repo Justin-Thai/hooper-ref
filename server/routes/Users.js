@@ -18,5 +18,8 @@ router.route('/:id')
 
 router.put('/mod/:id', verifyJWT, verifyRoles(ROLES_LIST.Admin), usersController.updateUserPrivilege);
 
+router.get('/search/names', usersController.getUserNames);
+
+router.get('/search/user', usersController.getUserSearchResults);
 
 module.exports = router;
