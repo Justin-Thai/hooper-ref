@@ -10,7 +10,6 @@
 
 # misc
 .DS_Store
-.env
 dump.rdb
 
 npm-debug.log*

@@ -43,7 +43,7 @@ function EntriesTable({ header, entries }) {
 			<div className="entries-header-container">
 				<div className="entries-header">{header} ({listOfEntries.length})</div>
 				{listOfEntries.length === 0 ? (
-					<div></div>
+					<div ref={domNode}></div>
 				) : (
 					<div ref={domNode} className="dropdown">
 						<button className="dropbtn" onClick={openSortDropdown}>Sort By</button>

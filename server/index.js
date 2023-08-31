@@ -1,11 +1,12 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const credentials = require('./middlewares/credentials');
 const cookieParser = require('cookie-parser');
-const PORT = process.env.PORT || 3001;
+const processEnv = require('./config/env');
+
+const { serverPort } = processEnv;
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -29,7 +30,7 @@ app.use('/auth', authRouter);
 
 
 db.sequelize.sync().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+    app.listen(serverPort, () => {
+        console.log(`Server is running on port ${serverPort}`);
     });
 });

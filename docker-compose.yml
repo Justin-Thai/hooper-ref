@@ -1,0 +1,83 @@
+version: "3.8"
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: hooperref_client_c
+    restart: always 
+    depends_on:
+      - server
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+    networks:
+      - hooperref-network
+    stdin_open: true
+    tty: true
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: hooperref_server_c
+    restart: always
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ./.env
+      - ./mysql.env
+    ports:
+      - 3001:3001
+    volumes:
+      - ./server:/app/server
+      - /app/server/node_modules
+    networks:
+      - hooperref-network
+
+  db:
+    image: mysql:8.0-debian
+    container_name: hooperref_db_c
+    restart: always 
+    env_file:
+      - ./mysql.env
+    ports:
+      - 3307:3306
+    volumes:
+      - hooperref-db:/var/lib/mysql
+    networks:
+      - hooperref-network
+
+  redis:
+    image: redis:7.2.0-alpine
+    container_name: hooperref_redis_c
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - hooperref-cache:/var/lib/redis
+    networks:
+      - hooperref-network
+
+  web_scraper:
+    build:
+      context: ./web_scraper
+      dockerfile: Dockerfile
+    container_name: hooperref_scraper_c
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - ./web_scraper:/app/web_scraper
+    networks:
+      - hooperref-network
+
+volumes:
+  hooperref-db:
+  hooperref-cache:
+
+networks:
+  hooperref-network:

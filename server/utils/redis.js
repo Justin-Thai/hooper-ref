@@ -1,7 +1,8 @@
 const Redis = require('redis');
+const processEnv = require('../config/env');
 
-
-const redisClient = Redis.createClient();
+const { cacheHost } = processEnv;
+const redisClient = Redis.createClient({ url: `redis://${cacheHost}:6379` });
 
 (async () => {
     redisClient.on('connect', () => {

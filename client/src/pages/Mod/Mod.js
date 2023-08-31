@@ -195,72 +195,80 @@ function Mod() {
                             <p className={errMsg ? "error-message" : "offscreen"}>{errMsg}</p>
                             <div className="subs-table-header-container">
                                 <span className="subs-table-header">Submissions ({subs.length})</span>
-                                <div ref={domNode} className="dropdown">
-                                    <button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
-                                    <ul
-                                        className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
-                                        onClick={() => setSortDropdown(false)}
-                                        id="dropdown-options"
-                                    >
-                                        <li className="li-sort-asc">Default</li>
-                                        <li>Song</li>
-                                        <li>Artist</li>
-                                        <li>Player</li>
-                                        <li>User</li>
-                                        <li>Sent On</li>
-                                    </ul>
-                                </div>
+                                {subs.length === 0 ? (
+                                    <div ref={domNode}></div>
+                                ) : (
+                                    <div ref={domNode} className="dropdown">
+                                        <button className="dropbtn" onClick={openSortDropdown}>Sort By</button>
+                                        <ul
+                                            className={sortDropdown ? "dropdown-content-active" : "dropdown-content"}
+                                            onClick={() => setSortDropdown(false)}
+                                            id="dropdown-options"
+                                        >
+                                            <li className="li-sort-asc">Default</li>
+                                            <li>Song</li>
+                                            <li>Artist</li>
+                                            <li>Player</li>
+                                            <li>User</li>
+                                            <li>Sent On</li>
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
-                            <table className="subs-table">
-                                <thead>
-                                    <tr>
-                                        <th className="subs-table-number">#</th>
-                                        <th className="subs-table-song">Song</th>
-                                        <th className="subs-table-artist">Artist(s)</th>
-                                        <th className="subs-table-player">Player</th>
-                                        <th className="subs-table-link">Link</th>
-                                        <th className="subs-table-user">User</th>
-                                        <th className="subs-table-date">Sent On</th>
-                                        <th className="subs-table-action">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {subs.map((value) => {
-                                        return (
-                                            <tr key={value.id}>
-                                                <td></td>
-                                                <td>{value.song}</td>
-                                                <td>{value.artist}</td>
-                                                <td>{value.player}</td>
-                                                {value.link
-                                                    ? (
-                                                        <td className="subs-link">
-                                                            <div onClick={() => {
-                                                                window.open(value.link, "_blank");
-                                                            }}>
-                                                                <FontAwesomeIcon icon={faSpotify} className="icon-spotify" />
-                                                            </div>
-                                                        </td>
-                                                    ) : (
-                                                        <td className="subs-link">
-                                                            <FontAwesomeIcon icon={faCircleXmark} className="icon-none" />
-                                                        </td>
-                                                    )}
-                                                <td>{value.user}</td>
-                                                <td>{value.createdAt.split('T')[0]}</td>
-                                                <td className="subs-action">
-                                                    <div onClick={() => openAddModal(value)}>
-                                                        <FontAwesomeIcon icon={faCirclePlus} className="circle-button" />
-                                                    </div>
-                                                    <div onClick={() => openRemoveModal(value.id)}>
-                                                        <FontAwesomeIcon icon={faCircleMinus} className="circle-button" />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                            {subs.length === 0 ? (
+                                <div className="no-subs-text">No submissions found</div>
+                            ) : (
+                                <table className="subs-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="subs-table-number">#</th>
+                                            <th className="subs-table-song">Song</th>
+                                            <th className="subs-table-artist">Artist(s)</th>
+                                            <th className="subs-table-player">Player</th>
+                                            <th className="subs-table-link">Link</th>
+                                            <th className="subs-table-user">User</th>
+                                            <th className="subs-table-date">Sent On</th>
+                                            <th className="subs-table-action">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {subs.map((value) => {
+                                            return (
+                                                <tr key={value.id}>
+                                                    <td></td>
+                                                    <td>{value.song}</td>
+                                                    <td>{value.artist}</td>
+                                                    <td>{value.player}</td>
+                                                    {value.link
+                                                        ? (
+                                                            <td className="subs-link">
+                                                                <div onClick={() => {
+                                                                    window.open(value.link, "_blank");
+                                                                }}>
+                                                                    <FontAwesomeIcon icon={faSpotify} className="icon-spotify" />
+                                                                </div>
+                                                            </td>
+                                                        ) : (
+                                                            <td className="subs-link">
+                                                                <FontAwesomeIcon icon={faCircleXmark} className="icon-none" />
+                                                            </td>
+                                                        )}
+                                                    <td>{value.user}</td>
+                                                    <td>{value.createdAt.split('T')[0]}</td>
+                                                    <td className="subs-action">
+                                                        <div onClick={() => openAddModal(value)}>
+                                                            <FontAwesomeIcon icon={faCirclePlus} className="circle-button" />
+                                                        </div>
+                                                        <div onClick={() => openRemoveModal(value.id)}>
+                                                            <FontAwesomeIcon icon={faCircleMinus} className="circle-button" />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            )}
                             {removeModal && <Modal closeModal={setRemoveModal} continueAction={() => handleRemoveClick(selectedId)} />}
                             {addModal && <FormModal closeModal={setAddModal} continueAction={(entryData) => handleAddClick(entryData)} parentToChild={formData} />}
                         </>

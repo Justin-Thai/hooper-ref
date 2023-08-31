@@ -3,8 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const redisClient = require('../utils/redis');
 const nodemailer = require('nodemailer');
+const processEnv = require('../config/env');
 
-
+const { accessTokenSecret, refreshTokenSecret, passResetTokenSecret, emailAddress, emailPassword } = processEnv;
 const mailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const DEFAULT_EXPIRATION = 600;    // Seconds
 const htmlOutput = (recCode, username) => {
@@ -84,13 +85,13 @@ const login = async (req, res) => {
                 "role": foundUser.role,
             }
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        accessTokenSecret,
         { expiresIn: '10m' }    // CHANGE IN DEPLOYMENT
     );
 
     const refreshToken = jwt.sign(
         { "username": foundUser.username },
-        process.env.REFRESH_TOKEN_SECRET,
+        refreshTokenSecret,
         { expiresIn: '1d' }     // CHANGE IN DEPLOYMENT
     );
 
@@ -127,7 +128,7 @@ const handleRefreshToken = async (req, res) => {
 
     jwt.verify(
         refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
+        refreshTokenSecret,
         async (err, decoded) => {
             if (err) {
                 return res.status(403).json({ message: "Forbidden" });
@@ -147,7 +148,7 @@ const handleRefreshToken = async (req, res) => {
                         "role": role,
                     }
                 },
-                process.env.ACCESS_TOKEN_SECRET,
+                accessTokenSecret,
                 { expiresIn: '10m' }    // CHANGE IN DEPLOYMENT
             );
 
@@ -222,13 +223,13 @@ const sendRecoveryCode = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.EMAIL_ADDRESS,
-                pass: process.env.EMAIL_PASSWORD
+                user: emailAddress,
+                pass: emailPassword
             }
         });
 
         let mailOptions = {
-            from: `HooperRef <${process.env.EMAIL_ADDRESS}>`,
+            from: `HooperRef <${emailAddress}>`,
             to: user.email,
             subject: 'Your password recovery code',
             html: htmlOutput(recCode, user.username)
@@ -279,7 +280,7 @@ const checkRecoveryCode = async (req, res) => {
         redisClient.del(`recoveryOTP:${user.username}`);
         const resetToken = jwt.sign(
             { 'username': user.username },
-            process.env.PASS_RESET_TOKEN_SECRET,
+            passResetTokenSecret,
             { expiresIn: '10m' }
         );
         await redisClient.setEx(`resetToken:${user.username}`, DEFAULT_EXPIRATION, resetToken);
@@ -317,7 +318,7 @@ const resetPassword = async (req, res) => {
 
     jwt.verify(
         req.params.resetToken,
-        process.env.PASS_RESET_TOKEN_SECRET,
+        passResetTokenSecret,
         async (err, decoded) => {
             if (err) {
                 return res.status(403).json({ message: "Forbidden" });

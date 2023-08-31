@@ -20,6 +20,13 @@
     margin-bottom: 10px;
 }
 
+.no-subs-text {
+    text-align: left;
+    font-size: 2rem;
+    margin-top: 25px;
+    margin-bottom: 25px;   
+    color: var(--gray);
+}
 
 /* Submissions Table Header Components */
 
