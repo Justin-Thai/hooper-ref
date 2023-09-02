@@ -7,6 +7,7 @@
 
 # production
 /build
+/web_scraper/project_env
 
 # misc
 .DS_Store

@@ -157,7 +157,7 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
                                     type="password"
                                     autoComplete="off"
                                     id="input-edit"
-                                    name="confirmPass"
+                                    name="confirmNewPass"
                                     placeholder="Confirm New Password"
                                 />
                             </div>
@@ -175,7 +175,7 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
                         </Form>
                     </Formik>
                     <div className="profile-form-picture">
-                        <label for="profile-pic">Profile Picture</label>
+                        <label>Profile Picture</label>
                         <input type="file" id="profile-pic" name="profile-pic" accept=".png, .jpg, .jpeg" onChange={handleImage} />
                     </div>
                 </div>

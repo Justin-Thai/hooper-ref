@@ -23,14 +23,16 @@ function Profile() {
 			if (response.status === 204) {
 				navigate('/404-error', { state: { from: location }, replace: true });
 			}
-			setPlayer(response.data.playerKey);
-			setPlayerImage(response.data.bio.image_src);
-			setPlayerInfo(response.data.bio);
-			setPlayerStats(response.data.stats);
+			setPlayer(response.data?.playerKey);
+			setPlayerImage(response.data?.bio?.image_src);
+			setPlayerInfo(response.data?.bio);
+			setPlayerStats(response.data?.stats);
 
-			axios.get(`/entries/byPlayer/${response.data.playerKey.id}`).then((response) => {
-				setListOfEntries(response.data);
-			})
+			if (response.data.playerKey) {
+				axios.get(`/entries/byPlayer/${response.data.playerKey.id}`).then((response) => {
+					setListOfEntries(response.data);
+				});
+			}
 		});
 	}, [playercode]);
 

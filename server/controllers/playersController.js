@@ -1,9 +1,11 @@
 const { Players } = require('../models');
 const { spawnSync }  = require('child_process');
 const redisClient = require('../utils/redis');
+const processEnv  = require('../config/env');
 
 const DEFAULT_EXPIRATION = 300;    // Seconds
-const webScraperLocation = '../web_scraper/bf_web_scraper.py';
+const webScraperLocation = './web_scraper/bf_web_scraper.py';
+const { python } = processEnv;
 
 // @desc Gets all players
 // @route GET /players
@@ -70,7 +72,7 @@ const getPlayer = async (req, res) => {
     }
     else {
         try {
-            const webScraperProcess = spawnSync('../web_scraper/project_env/Scripts/python', [webScraperLocation, player.playerCode]);
+            const webScraperProcess = spawnSync(python, [webScraperLocation, player.playerCode]);
             if (webScraperProcess.status !== 0) {
                 console.error(`Child process error:\n ${webScraperProcess.stderr.toString()}`);
                 console.error(`Child process exited with code ${webScraperProcess.status}.`);

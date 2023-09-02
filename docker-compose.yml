@@ -12,7 +12,6 @@ services:
       - 3000:3000
     volumes:
       - ./client:/app/client
-      - /app/client/node_modules
     networks:
       - hooperref-network
     stdin_open: true
@@ -34,7 +33,6 @@ services:
       - 3001:3001
     volumes:
       - ./server:/app/server
-      - /app/server/node_modules
     networks:
       - hooperref-network
 
@@ -59,19 +57,6 @@ services:
       - 6379:6379
     volumes:
       - hooperref-cache:/var/lib/redis
-    networks:
-      - hooperref-network
-
-  web_scraper:
-    build:
-      context: ./web_scraper
-      dockerfile: Dockerfile
-    container_name: hooperref_scraper_c
-    restart: always
-    ports:
-      - 8000:8000
-    volumes:
-      - ./web_scraper:/app/web_scraper
     networks:
       - hooperref-network
 
