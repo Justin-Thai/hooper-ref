@@ -6,7 +6,7 @@ import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { sortItemsByCat } from '../../util/Utils';
 import useClickOutside from '../../hooks/useClickOutside';
 
-function EntriesTable({ header, entries }) {
+function EntriesTable({ header, entries, playerLink }) {
 	let listOfEntries = entries;
 	const categories = ["id", "song", "artist", "album", "year", "playerCode"];
 	const [sortDropdown, setSortDropdown] = useState(false);
@@ -89,13 +89,19 @@ function EntriesTable({ header, entries }) {
 										<div>{value.album}</div>
 										<div>({value.year})</div>
 									</td>
-									<td className="entry-player"
-										onClick={
-											() => navigate(`/player/${value.playerCode}`)
-										}
-									>
-										{value.playerName}
-									</td>
+									{playerLink ? (
+										<td className="entry-player"
+											onClick={
+												() => navigate(`/player/${value.playerCode}`)
+											}
+										>
+											{value.playerName}
+										</td>
+									) : (
+										<td className="entry-player">
+											{value.playerName}
+										</td>
+									)}
 									<td className="entry-excerpt">"{value.excerpt}"</td>
 									<td className="entry-link">
 										<div onClick={() => {

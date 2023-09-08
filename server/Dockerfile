@@ -1,5 +1,4 @@
 FROM node:18-alpine
-
 RUN apk update 
 RUN apk add --update-cache python3 py3-pip
 COPY web_scraper/requirements.txt .

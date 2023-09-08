@@ -44,7 +44,7 @@ function Search() {
             <div className="page-description">Search for any user, player, artist, or song.</div>
             <SearchBar placeholder="Search..." data={listOfItems} input={query}/>
             <UsersGrid header="Users" users={userResults}/>
-            <EntriesTable header="Songs" entries={searchResults}/>
+            <EntriesTable header="Songs" entries={searchResults} playerLink={true}/>
         </div>
     )
 }

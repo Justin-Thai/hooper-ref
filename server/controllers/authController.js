@@ -97,7 +97,6 @@ const login = async (req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result = await foundUser.save();
-    console.log(result);
 
     res.cookie('jwt', refreshToken, {
         httpOnly: true,
@@ -184,7 +183,6 @@ const logout = async (req, res) => {
 
     foundUser.refreshToken = null;
     const result = await foundUser.save();
-    console.log(result);
 
     res.clearCookie('jwt',
         {

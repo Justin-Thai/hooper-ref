@@ -50,7 +50,6 @@ function Profile() {
 
 	const signOut = async () => {
 		await logout();
-		console.log("logged out");
 		setSuccess(true);
 	};
 
@@ -95,7 +94,7 @@ function Profile() {
 							}
 						</div>
 					</div>
-					<EntriesTable header="Submitted Songs" entries={listOfEntries} />
+					<EntriesTable header="Submitted Songs" entries={listOfEntries} playerLink={true} />
 					{openModal && <ProfileModal closeModal={setOpenModal} continueAction={() => signOut()} parentToChild={user} />}
 				</>
 			)}

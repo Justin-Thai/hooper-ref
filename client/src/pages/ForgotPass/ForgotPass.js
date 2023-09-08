@@ -80,7 +80,6 @@ function ForgotPass() {
 
     const verifyCode = async () => {
         const code = pincode.join('');
-        console.log(code);
         const data = { email: email, code: code };
 
         try {

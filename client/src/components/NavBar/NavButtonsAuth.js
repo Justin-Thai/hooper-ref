@@ -9,7 +9,6 @@ function NavButtonsAuth({ username }) {
 
     const signOut = async () => {
         await logout();
-        console.log("logged out");
         navigate('/');
     };
 

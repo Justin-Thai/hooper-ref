@@ -13,7 +13,7 @@ function Profile() {
 	const [playerImage, setPlayerImage] = useState("");
 	const [playerInfo, setPlayerInfo] = useState({});
 	const [playerStats, setPlayerStats] = useState({});
-	const [listOfEntires, setListOfEntries] = useState([]);
+	const [listOfEntries, setListOfEntries] = useState([]);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -137,7 +137,7 @@ function Profile() {
 					</table>
 				</div>
 			</div>
-			<EntriesTable header="Mentioned Songs" entries={listOfEntires} />
+			<EntriesTable header="Mentioned Songs" entries={listOfEntries} playerLink={false} />
 		</div>
 	)
 }

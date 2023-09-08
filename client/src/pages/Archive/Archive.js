@@ -27,7 +27,7 @@ function Archive() {
                     and {numPlayers} players referenced.
                 </div>
             </div>
-            <EntriesTable header="Archive Entries" entries={listOfEntries} />
+            <EntriesTable header="Archive Entries" entries={listOfEntries} playerLink={true} />
         </div>
     );
 }

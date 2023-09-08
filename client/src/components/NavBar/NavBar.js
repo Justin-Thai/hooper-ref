@@ -50,6 +50,11 @@ function NavBar() {
                                             {value.icon}
                                             <span className="menuOptionTitle">{value.title}</span>
                                         </Link>
+                                    ) : value.title === 'Feedback' ? (
+                                        <Link to={value.path} target='__blank'>
+                                            {value.icon}
+                                            <span className="menuOptionTitle">{value.title}</span>
+                                        </Link>
                                     ) : (
                                         <Link to={value.path}>
                                             {value.icon}
@@ -64,10 +69,18 @@ function NavBar() {
                         SidebarDataNoAuth.map((value, index) => {
                             return (
                                 <li key={index} className={value.cName}>
-                                    <Link to={value.path}>
-                                        {value.icon}
-                                        <span className="menuOptionTitle">{value.title}</span>
-                                    </Link>
+                                    {value.title === 'Feedback' ? (
+                                        <Link to={value.path} target='__blank'>
+                                            {value.icon}
+                                            <span className="menuOptionTitle">{value.title}</span>
+                                        </Link>
+                                    ) : (
+                                        <Link to={value.path}>
+                                            {value.icon}
+                                            <span className="menuOptionTitle">{value.title}</span>
+                                        </Link>
+                                    )}
+
                                 </li>
                             );
                         })

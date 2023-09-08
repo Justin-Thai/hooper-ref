@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouseChimney, faUser, faLightbulb, faBoxArchive, faHammer, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
+import { faHouseChimney, faUser, faLightbulb, faBoxArchive, faHammer, faScrewdriverWrench, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 const SidebarDataNoAuth = [
     {
@@ -19,6 +19,12 @@ const SidebarDataNoAuth = [
         title: "Archive",
         path: "/archive",
         icon: <FontAwesomeIcon icon={faBoxArchive} />,
+        cName: "navText",
+    },
+    {
+        title: "Feedback",
+        path: "https://forms.gle/RBe89MVA4rQ5Q25Y7",
+        icon: <FontAwesomeIcon icon={faClipboard} />,
         cName: "navText",
     }
 ];
@@ -58,6 +64,12 @@ const SidebarDataAuth = [
         title: "Admin",
         path: "/admin",
         icon: <FontAwesomeIcon icon={faScrewdriverWrench} />,
+        cName: "navText",
+    },
+    {
+        title: "Feedback",
+        path: "https://forms.gle/RBe89MVA4rQ5Q25Y7",
+        icon: <FontAwesomeIcon icon={faClipboard} />,
         cName: "navText",
     }
 ];

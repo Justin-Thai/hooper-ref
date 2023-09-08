@@ -82,7 +82,6 @@ function ProfileModal({ closeModal, continueAction, parentToChild }) {
             confirmPass: data.confirmNewPass,
             image: profileImage
         }
-        console.log(userData);
 
         try {
             await axiosPrivate.put(`users/${data.id}`, userData,

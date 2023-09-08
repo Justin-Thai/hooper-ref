@@ -32,7 +32,6 @@ function Login() {
                 resetUser();
                 setPassword('');
                 setErrMsg('');
-                console.log(response.data);
                 navigate(from, { replace: true });
             });
         }
