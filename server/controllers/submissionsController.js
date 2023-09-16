@@ -1,7 +1,7 @@
 const { Submissions, Users, Sequelize } = require('../models');
 
 // @desc Gets all submissions in the database
-// @route GET /submissions
+// @route GET /api/submissions
 //
 const getAllSubs = async (req, res) => {
     const listOfSubs = await Submissions.findAll({
@@ -24,7 +24,7 @@ const getAllSubs = async (req, res) => {
 }
 
 // @desc Creates a new submission
-// @route POST /submissions
+// @route POST /api/submissions
 //
 const createSub = async (req, res) => {
     const submission = req.body;
@@ -34,7 +34,7 @@ const createSub = async (req, res) => {
 }
 
 // @desc Deletes a submission
-// @route DELETE /submissions/:id
+// @route DELETE /api/submissions/:id
 //
 const deleteSub = async (req, res) => {
     if (!req?.params?.id) {

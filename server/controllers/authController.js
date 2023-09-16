@@ -58,7 +58,7 @@ const htmlOutput = (recCode, username) => {
 };
 
 //  @desc Logs in the user to their account if credentials are valid
-//  @route POST /auth
+//  @route POST /api/auth
 //
 const login = async (req, res) => {
     const { username, password } = req.body;
@@ -86,13 +86,13 @@ const login = async (req, res) => {
             }
         },
         accessTokenSecret,
-        { expiresIn: '10m' }    // CHANGE IN DEPLOYMENT
+        { expiresIn: '15m' }  
     );
 
     const refreshToken = jwt.sign(
         { "username": foundUser.username },
         refreshTokenSecret,
-        { expiresIn: '1d' }     // CHANGE IN DEPLOYMENT
+        { expiresIn: '14d' }
     );
 
     foundUser.refreshToken = refreshToken;
@@ -100,16 +100,16 @@ const login = async (req, res) => {
 
     res.cookie('jwt', refreshToken, {
         httpOnly: true,
-        secure: true,   // UNCOMMENT IN DEPLOYMENT
+        secure: true,   
         sameSite: 'None',
-        maxAge: 7 * 24 * 60 * 60 * 1000,    // CHANGE IN DEPLOYMENT
+        maxAge: 14 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({ accessToken });
 }
 
-//  @desc Gets a refresh token
-//  @route GET /auth/refresh
+//  @desc Gets a new access token
+//  @route GET /api/auth/refresh
 //
 const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
@@ -148,7 +148,7 @@ const handleRefreshToken = async (req, res) => {
                     }
                 },
                 accessTokenSecret,
-                { expiresIn: '10m' }    // CHANGE IN DEPLOYMENT
+                { expiresIn: '15m' }  
             );
 
             return res.json({ accessToken });
@@ -157,7 +157,7 @@ const handleRefreshToken = async (req, res) => {
 }
 
 //  @desc Log outs the user
-//  @route POST /auth/logout
+//  @route POST /api/auth/logout
 //
 const logout = async (req, res) => {
     const cookies = req.cookies;
@@ -174,7 +174,7 @@ const logout = async (req, res) => {
             {
                 httpOnly: true,
                 sameSite: 'None',
-                secure: true,   // UNCOMMENT IN DEPLOYMENT
+                secure: true,  
             }
         );
 
@@ -188,7 +188,7 @@ const logout = async (req, res) => {
         {
             httpOnly: true,
             sameSite: 'None',
-            secure: true,   // UNCOMMENT IN DEPLOYMENT
+            secure: true,  
         }
     );
 
@@ -196,7 +196,7 @@ const logout = async (req, res) => {
 }
 
 //  @desc Sends an email that contains a verification code for resetting a password
-//  @route POST /auth/sendRecoveryCode
+//  @route POST /api/auth/sendRecoveryCode
 //
 const sendRecoveryCode = async (req, res) => {
     const email = req.body?.email;
@@ -247,7 +247,7 @@ const sendRecoveryCode = async (req, res) => {
 }
 
 //  @desc Verifies the submitted recovery code and returns a JSON web token if verified
-//  @route POST /auth/checkRecoveryCode
+//  @route POST /api/auth/checkRecoveryCode
 //
 const checkRecoveryCode = async (req, res) => {
     const { email, code } = req.body;
@@ -291,7 +291,7 @@ const checkRecoveryCode = async (req, res) => {
 }
 
 //  @desc Resets user's password if reset token is valid
-//  @route PATCH /auth/resetPassword/:user/:resetToken
+//  @route PATCH /api/auth/resetPassword/:user/:resetToken
 //
 const resetPassword = async (req, res) => {
     if (!req?.body?.password || !req?.body?.confirmPass ) {

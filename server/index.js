@@ -18,15 +18,15 @@ const db = require('./models');
 
 // Routers
 const subsRouter = require('./routes/Submissions');
-app.use('/submissions', subsRouter);
+app.use('/api/submissions', subsRouter);
 const entriesRouter = require('./routes/Entries');
-app.use('/entries', entriesRouter);
+app.use('/api/entries', entriesRouter);
 const playersRouter = require('./routes/Players');
-app.use('/players', playersRouter);
+app.use('/api/players', playersRouter);
 const usersRouter = require('./routes/Users');
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
 const authRouter = require('./routes/Auth');
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 
 
 db.sequelize.sync().then(() => {

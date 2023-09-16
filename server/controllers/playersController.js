@@ -3,7 +3,7 @@ const { spawnSync }  = require('child_process');
 const redisClient = require('../utils/redis');
 const processEnv  = require('../config/env');
 
-const DEFAULT_EXPIRATION = 300;    // Seconds
+const DEFAULT_EXPIRATION = 2630000;    // Seconds
 const webScraperLocation = './web_scraper/bf_web_scraper.py';
 const { python } = processEnv;
 
@@ -16,7 +16,7 @@ const getAllPlayers = async (req, res) => {
 }
 
 // @desc Creates a new player
-// @route POST /players
+// @route POST /api/players
 //
 const createPlayer = async (req, res) => {
     const { name, playerCode } = req.body;
@@ -40,7 +40,7 @@ const createPlayer = async (req, res) => {
 }
 
 // @desc Gets a player based on given player code
-// @route PUT /players/:playerCode
+// @route PUT /api/players/:playerCode
 //
 const getPlayer = async (req, res) => {
     if (!req?.params?.playerCode) {
@@ -95,7 +95,7 @@ const getPlayer = async (req, res) => {
 }
 
 // @desc Updates a current player
-// @route PUT /players/:id
+// @route PUT /api/players/:id
 //
 const updatePlayer = async (req, res) => {
     if (!req?.params?.id) {
@@ -120,7 +120,7 @@ const updatePlayer = async (req, res) => {
 }
 
 // @desc Deletes a player
-// @route DELETE /players/:id
+// @route DELETE /api/players/:id
 //
 const deletePlayer = async (req, res) => {
     if (!req?.params?.id) {

@@ -10,7 +10,7 @@ const imageSignatures = {
 };
 
 //  @desc Gets all users
-//  @route GET /users
+//  @route GET /api/users
 //
 const getAllUsers = async (req, res) => {
     const users = await Users.findAll({
@@ -38,7 +38,7 @@ const getAllUsers = async (req, res) => {
 }
 
 //  @desc Creates a new user and hashes password
-//  @route POST /users
+//  @route POST /api/users
 //
 const createUser = async (req, res) => {
     const { username, password, email } = req.body;
@@ -65,7 +65,7 @@ const createUser = async (req, res) => {
 }
 
 //  @desc Gets a user based on given username
-//  @route GET /users/:username
+//  @route GET /api/users/:username
 //
 const getUser = async (req, res) => {
     if (!req?.params?.username) {
@@ -92,7 +92,7 @@ const getUser = async (req, res) => {
 }
 
 //  @desc Updates a user's info 
-//  @route PUT /users/:id
+//  @route PUT /api/users/:id
 //
 const updateUser = async (req, res) => {
     if (!req?.params?.id) {
@@ -169,7 +169,7 @@ const updateUser = async (req, res) => {
 }
 
 //  @desc Deletes a user
-//  @route DELETE /users/:id
+//  @route DELETE /api/users/:id
 //
 const deleteUser = async (req, res) => {
     if (!req?.params?.id) {
@@ -193,7 +193,7 @@ const deleteUser = async (req, res) => {
 }
 
 //  @desc Updates a user's privilege
-//  @route PUT /users/mod/:id
+//  @route PUT /api/users/mod/:id
 //
 const updateUserPrivilege = async (req, res) => {
     if (!req?.params?.id) {
@@ -219,7 +219,7 @@ const updateUserPrivilege = async (req, res) => {
 }
 
 // @desc Gets a list of users' usernames (for searching purposes)
-// @route GET /users/search/names
+// @route GET /api/users/search/names
 //
 const getUserNames = async (req, res) => {
     const listOfNames = await Users.findAll({
@@ -239,7 +239,7 @@ const getUserNames = async (req, res) => {
 }
 
 // @desc Gets all users based on search query
-// @route GET /users/search/user
+// @route GET /api/users/search/user
 //
 const getUserSearchResults = async (req, res) => {
     const query = req.query.q.toLowerCase();

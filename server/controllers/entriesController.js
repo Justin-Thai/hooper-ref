@@ -3,7 +3,7 @@ const Op = Sequelize.Op;
 
 
 //  @desc Gets all song entries in the database
-//  @route GET /entries
+//  @route GET /api/entries
 //
 const getAllEntries = async (req, res) => {
     const listOfEntries = await Entries.findAll({
@@ -27,7 +27,7 @@ const getAllEntries = async (req, res) => {
 }
 
 //  @desc Creates a new song entry
-//  @route POST /entries
+//  @route POST /api/entries
 //
 const createEntry = async (req, res) => {
     const entry = req.body;
@@ -36,7 +36,7 @@ const createEntry = async (req, res) => {
 }
 
 //  @desc Updates a song entry
-//  @route PUT /entries/:id
+//  @route PUT /api/entries/:id
 //
 const updateEntry = async (req, res) => {
     if (!req?.params?.id) {
@@ -70,7 +70,7 @@ const updateEntry = async (req, res) => {
 }
 
 //  @desc Deletes a song entry
-//  @route DELETE /entries/:id
+//  @route DELETE /api/entries/:id
 //
 const deleteEntry = async (req, res) => {
     if (!req?.params?.id) {
@@ -88,7 +88,7 @@ const deleteEntry = async (req, res) => {
 }
 
 //  @desc Gets all song entries submitted by the user
-//  @route GET /entries/byUser/:id
+//  @route GET /api/entries/byUser/:id
 //
 const getUserEntries = async (req, res) => {
     if (!req?.params?.id) { 
@@ -122,7 +122,7 @@ const getUserEntries = async (req, res) => {
 
 
 //  @desc Gets all song entries that references a specific player
-//  @route GET /entries/byPlayer/:id
+//  @route GET /api/entries/byPlayer/:id
 //
 const getPlayerEntries = async (req, res) => {
     if (!req?.params?.id) { 
@@ -155,7 +155,7 @@ const getPlayerEntries = async (req, res) => {
 }
 
 //  @desc Gets all searchable items for use in search bar 
-//  @route GET /entries/searchItems
+//  @route GET /api/entries/searchItems
 //
 const getSearchItems = async (req, res) => {
     const listOfItems = await Entries.findAll({
@@ -180,7 +180,7 @@ const getSearchItems = async (req, res) => {
 }
 
 //  @desc Gets all song entries based on search query 
-//  @route GET /entries/search
+//  @route GET /api/entries/search
 //
 const getSearchResults = async (req, res) => {
     const query = req.query.q.toLowerCase();
@@ -228,7 +228,7 @@ const getSearchResults = async (req, res) => {
 }
 
 //  @desc Gets number of unique players in database
-//  @route GET /entries/playerCount
+//  @route GET /api/entries/playerCount
 //
 const getPlayerCount = async (req, res) => {
     const numPlayers = await Entries.findAll({
